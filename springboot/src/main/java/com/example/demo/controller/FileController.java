@@ -71,14 +71,13 @@ public class FileController {
      * @param url 旧头像访问地址
      */
     public static void removeOldAvatar(String url){
+        //获取头像存储路径
         String basePath=System.getProperty("user.dir")+"/springboot/src/main/resources/files/";
         List<String> fileNames=FileUtil.listFileNames(basePath);
-//        System.out.println("===========================exist files===========================");
-//        fileNames.forEach(System.out::println);
-//        System.out.println("===========================    del    ===========================");
-//        System.out.println(url);
+        //根据url提取旧头像uuid
         String uuid=StrUtil.removePrefix(url,ip+":"+port+"/files/");
+        //根据uuid删除旧头像文件
         String fileName=fileNames.stream().filter(name->name.contains(uuid)).findAny().orElse("");
-        if(fileName!="") FileUtil.del(fileName);
+        if(fileName!="") FileUtil.del(basePath+fileName);
     }
 }
