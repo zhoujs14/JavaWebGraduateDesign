@@ -1,5 +1,10 @@
 # springboot-vue-demo
 
+## 项目说明
+前后端分离的项目模板  
+前端：Vue ElementPlus  
+后端: Springboot MybatisPlus Hutool
+
 ## Project setup
 ```
 yarn install
