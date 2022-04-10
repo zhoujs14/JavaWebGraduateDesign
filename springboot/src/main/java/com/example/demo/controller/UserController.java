@@ -66,6 +66,7 @@ public class UserController {
         return Result.success(res);
     }
 
+    //注册
     @PostMapping("/register")
     public Result<?> register(@RequestBody User user){
         //校验注册数据合法性
@@ -81,6 +82,22 @@ public class UserController {
         if(u!=null) return Result.error("-2","该昵称已被注册");
 
         userMapper.insert(user);
+        return Result.success();
+    }
+
+    //保存头像
+    @PostMapping("/avatar")
+    public Result<?> saveAvatar(@RequestBody User user){
+        User res=userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername,user.getUsername()));
+        if(res==null) return Result.error("-1","头像保存失败");
+
+        //更新头像路径
+        String oldSrc=res.getAvatarSrc();
+        res.setAvatarSrc(user.getAvatarSrc());
+        userMapper.updateById(user);
+
+        //删除旧头像
+        if(oldSrc!=null&&oldSrc.length()>0) FileController.removeOldAvatar(oldSrc);
         return Result.success();
     }
 }

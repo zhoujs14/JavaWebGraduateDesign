@@ -16,6 +16,7 @@ public class User {
     private String gender;
     private String nickName;
     private Integer age;
+    private String avatarSrc;
 
     public static Result<?> validate(User u){
         if(u.getUsername()==null||u.getUsername().length()<2||u.getUsername().length()>18) return Result.error("-1","非法用户名");

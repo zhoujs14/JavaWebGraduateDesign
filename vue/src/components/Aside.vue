@@ -8,7 +8,7 @@
       >
 <!-- el-menu 加上router属性后 menu-item的index即跳转路由 -->
         <el-sub-menu index="1">
-          <template>系统管理</template>
+          <template #title>系统管理</template>
           <el-menu-item index="user">用户管理</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="data">数据管理</el-menu-item>

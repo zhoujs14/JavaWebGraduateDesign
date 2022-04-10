@@ -4,7 +4,6 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.example.demo.common.Result;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,9 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/files")
 public class FileController {
-    @Value("${server.port}")
-    private String port;
-
+    private static final String port="9090";
     private static final String ip="http://localhost";
 
     /**
@@ -31,6 +28,7 @@ public class FileController {
      * @return
      * @throws IOException
      */
+    @CrossOrigin //允许跨域
     @PostMapping("/upload")
     public Result<?> upload(MultipartFile file) throws IOException {
         String fileName=file.getOriginalFilename();
@@ -66,5 +64,21 @@ public class FileController {
         }catch (Exception e){
             System.out.println("下载文件失败");
         }
+    }
+
+    /**
+     * 删除旧的用户头像
+     * @param url 旧头像访问地址
+     */
+    public static void removeOldAvatar(String url){
+        String basePath=System.getProperty("user.dir")+"/springboot/src/main/resources/files/";
+        List<String> fileNames=FileUtil.listFileNames(basePath);
+//        System.out.println("===========================exist files===========================");
+//        fileNames.forEach(System.out::println);
+//        System.out.println("===========================    del    ===========================");
+//        System.out.println(url);
+        String uuid=StrUtil.removePrefix(url,ip+":"+port+"/files/");
+        String fileName=fileNames.stream().filter(name->name.contains(uuid)).findAny().orElse("");
+        if(fileName!="") FileUtil.del(fileName);
     }
 }
