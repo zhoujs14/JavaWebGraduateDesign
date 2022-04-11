@@ -19,7 +19,7 @@
             年龄：{{user.age||"未知"}}
           </el-row>
           <el-row class="center">
-            <el-upload action="http://localhost:9090/files/upload" :on-success="fileUploadSuccess" :data="user">
+            <el-upload :show-file-list="false" action="http://localhost:9090/files/upload" :on-success="fileUploadSuccess" :data="user">
               <el-button type="primary">头像上传</el-button>
             </el-upload>
           </el-row>
