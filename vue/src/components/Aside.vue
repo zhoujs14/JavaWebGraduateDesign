@@ -11,7 +11,7 @@
           <template #title>系统管理</template>
           <el-menu-item index="user">用户管理</el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="data">数据管理</el-menu-item>
+        <el-menu-item index="blog">文章管理</el-menu-item>
       </el-menu>
 </template>
 

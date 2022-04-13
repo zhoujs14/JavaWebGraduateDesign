@@ -53,7 +53,6 @@ public class UserController {
         LambdaQueryWrapper<User> wrapper= Wrappers.<User>lambdaQuery();
         if(StrUtil.isNotBlank(keyWords)) wrapper.like(User::getNickName,keyWords); //输入不为空才使用like模糊查询
         Page<User> userPage= userMapper.selectPage(new Page<>(pageNum,pageSize), wrapper.select(User::getId,User::getUsername,User::getNickName,User::getAge,User::getGender));
-        System.out.println("userPage:"+userPage);
         return Result.success(userPage);
     }
 

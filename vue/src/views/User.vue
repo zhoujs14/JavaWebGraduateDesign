@@ -8,8 +8,6 @@
 <!--    功能区域-->
     <div style="margin: 10px 0">
       <el-button type="primary" @click="add">新增</el-button>
-      <el-button type="primary">导入</el-button>
-      <el-button type="primary">导出</el-button>
     </div>
 <!--    表格-->
     <el-table :data="tableData" border stripe style="width: 100%" fit>

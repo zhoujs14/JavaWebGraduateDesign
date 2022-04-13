@@ -13,9 +13,9 @@ const routes = [
         component:()=>import("../views/User")
       },
       {
-        path:'data',
-        name:'data',
-        component:()=>import("../views/Data")
+        path:'blog',
+        name:'blog',
+        component:()=>import("../views/Blog")
       }
     ]
   },

@@ -3,7 +3,11 @@ package com.example.demo.controller;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSON;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
 import com.example.demo.common.Result;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +23,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/files")
 public class FileController {
-    private static final String port="9090";
+    @Value("9090")
+    private String port;
     private static final String ip="http://localhost";
 
     /**
@@ -30,13 +35,55 @@ public class FileController {
      */
     @CrossOrigin //允许跨域
     @PostMapping("/upload")
-    public Result<?> upload(MultipartFile file) throws IOException {
+    public Result<?> upload(MultipartFile file) {
         String fileName=file.getOriginalFilename();
         String uuid= IdUtil.fastSimpleUUID(); //生成uuid
         String rootFilePath =System.getProperty("user.dir")+"/springboot/src/main/resources/files/"+uuid+"_"+fileName;
-        FileUtil.writeBytes(file.getBytes(),rootFilePath);
+
+        try {
+            FileUtil.writeBytes(file.getBytes(),rootFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Result.error("-1",e.getMessage());
+        }
 
         return Result.success(ip+":"+port+"/files/"+uuid);
+    }
+
+    /**
+     * 文章图片上传接口
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    @CrossOrigin //允许跨域
+    @PostMapping("/blogImageUpload")
+    public JSON blogImageUpload(MultipartFile file) {
+        //生成文件名
+        String fileName=file.getOriginalFilename();
+        String uuid= IdUtil.fastSimpleUUID();
+        String rootFilePath =System.getProperty("user.dir")+"/springboot/src/main/resources/files/"+uuid+"_"+fileName;
+        String url=ip+":"+port+"/files/"+uuid;
+
+        JSONObject data=new JSONObject();
+        JSONArray arr=new JSONArray();
+        JSONObject json=new JSONObject();
+
+        try{
+            FileUtil.writeBytes(file.getBytes(),rootFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            json.set("errno",1);
+            json.set("message",e.getMessage());
+            return json;
+        }
+
+        //返回JSON结果
+        data.set("url",url);
+        arr.add(data);
+        json.set("errno",0);
+        json.set("data",arr);
+        return json;
     }
 
     /**
@@ -75,7 +122,7 @@ public class FileController {
         String basePath=System.getProperty("user.dir")+"/springboot/src/main/resources/files/";
         List<String> fileNames=FileUtil.listFileNames(basePath);
         //根据url提取旧头像uuid
-        String uuid=StrUtil.removePrefix(url,ip+":"+port+"/files/");
+        String uuid=url.substring(url.lastIndexOf('/')+1);
         //根据uuid删除旧头像文件
         String fileName=fileNames.stream().filter(name->name.contains(uuid)).findAny().orElse("");
         if(fileName!="") FileUtil.del(basePath+fileName);
