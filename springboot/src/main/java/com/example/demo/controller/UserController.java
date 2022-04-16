@@ -91,6 +91,7 @@ public class UserController extends BaseController {
                 .eq(User::getPassword,user.getPassword()));
 
         if(res==null) return Result.error("-1","用户名或密码错误");
+        res.setType("user");
         String token= TokenUtils.genToken(res);
         res.setToken(token);
         res.setPassword(null);

@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
 import com.auth0.jwt.JWT;
+import com.example.demo.entity.Account;
+import com.example.demo.entity.Admin;
 import com.example.demo.entity.User;
+import com.example.demo.mapper.AdminMapper;
 import com.example.demo.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 public class BaseController {
 
     @Autowired
+    private AdminMapper adminMapper;
+
+    @Autowired
     private UserMapper userMapper;
 
     @Autowired
@@ -19,8 +25,15 @@ public class BaseController {
 
     /**
      * 根据token获取用户信息
-     * @return user
+     * @return admin
      */
+    public Admin getAdmin() {
+        String token = request.getHeader("token");
+        String aud = JWT.decode(token).getAudience().get(0);
+        Integer adminId = Integer.valueOf(aud);
+        return adminMapper.selectById(adminId);
+    }
+
     public User getUser() {
         String token = request.getHeader("token");
         String aud = JWT.decode(token).getAudience().get(0);

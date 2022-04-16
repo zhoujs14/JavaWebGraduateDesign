@@ -1,10 +1,12 @@
 package com.example.demo.utils;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.json.JSONUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.demo.entity.Account;
+import com.example.demo.entity.Admin;
 import com.example.demo.entity.User;
+import com.example.demo.mapper.AdminMapper;
 import com.example.demo.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,21 +25,43 @@ public class TokenUtils {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private AdminMapper adminMapper;
+
     private static UserMapper staticUserMapper;
+
+    private static AdminMapper staticAdminMapper;
 
     @PostConstruct
     public void init() {
         staticUserMapper = userMapper;
+        staticAdminMapper = adminMapper;
     }
 
     /**
      * 生成token
-     * @param user
+     * @param account
      * @return
      */
-    public static String genToken(User user) {
-        return JWT.create().withExpiresAt(DateUtil.offsetDay(new Date(), 1)).withAudience(user.getId().toString())
-                .sign(Algorithm.HMAC256(user.getPassword()));
+    public static String genToken(Account account) {
+        return JWT.create().withExpiresAt(DateUtil.offsetDay(new Date(), 1)).withAudience(account.getId().toString())
+                .withClaim("type",account.getType()).sign(Algorithm.HMAC256(account.getPassword()));
+    }
+
+    public static Account getAccount(){
+        try {
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            String token = request.getHeader("token");
+            String aud = JWT.decode(token).getAudience().get(0);
+            String type=JWT.decode(token).getClaim("type").toString();
+            if(type.equals("admin")){
+                return staticAdminMapper.selectById(Integer.valueOf(aud));
+            }
+            return staticUserMapper.selectById(Integer.valueOf(aud));
+        }catch (Exception e){
+            log.error("解析token失败", e);
+            return null;
+        }
     }
 
     /**
@@ -51,6 +75,23 @@ public class TokenUtils {
             String aud = JWT.decode(token).getAudience().get(0);
             Integer userId = Integer.valueOf(aud);
             return staticUserMapper.selectById(userId);
+        } catch (Exception e) {
+            log.error("解析token失败", e);
+            return null;
+        }
+    }
+
+    /**
+     * 获取token中的管理员信息
+     * @return
+     */
+    public static Admin getAdmin() {
+        try {
+            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            String token = request.getHeader("token");
+            String aud = JWT.decode(token).getAudience().get(0);
+            Integer adminId = Integer.valueOf(aud);
+            return staticAdminMapper.selectById(adminId);
         } catch (Exception e) {
             log.error("解析token失败", e);
             return null;

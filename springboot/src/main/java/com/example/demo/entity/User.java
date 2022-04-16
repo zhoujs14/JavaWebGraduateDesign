@@ -9,11 +9,9 @@ import lombok.Data;
 
 @TableName ("user")
 @Data
-public class User {
+public class User extends Account {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
-    private String username;
-    private String password;
     private String gender;
     private String nickName;
     private Integer age;
