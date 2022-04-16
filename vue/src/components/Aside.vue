@@ -7,7 +7,7 @@
           router
       >
 <!-- el-menu 加上router属性后 menu-item的index即跳转路由 -->
-        <el-sub-menu index="1">
+        <el-sub-menu index="1" v-if="user.role===1">
           <template #title>系统管理</template>
           <el-menu-item index="user">用户管理</el-menu-item>
         </el-sub-menu>
@@ -22,6 +22,7 @@ import {
   Menu as IconMenu,
   Setting,
 } from '@element-plus/icons-vue'
+import request from "../../utils/request";
 
 export default {
   name:"Aside",
@@ -33,8 +34,19 @@ export default {
   },
   data(){
     return {
-      path: this.$route.path.substr(1) //激活当前url对应menu选项
+      path: this.$route.path.substr(1), //激活当前url对应menu选项
+      user:{}
     }
+  },
+  created() {
+    let userStr=sessionStorage.getItem("user") || "{}"
+    this.user=JSON.parse(userStr)
+
+    request.get("/user/"+this.user.id).then(res=>{
+      if(res?.code==='0'){
+        this.user=res.data
+      }
+    })
   }
 }
 </script>

@@ -16,6 +16,12 @@
       <el-table-column prop="nickName" label="昵称" />
       <el-table-column prop="age" label="年龄" />
       <el-table-column prop="gender" label="性别" />
+      <el-table-column label="角色">
+        <template #default="scope">
+          <span v-if="scope.row.role===1">管理员</span>
+          <span v-if="scope.row.role===2">普通用户</span>
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" label="操作" width="120">
         <template #default="scope">
           <el-button @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
@@ -45,16 +51,23 @@
           <el-form-item label="用户名">
             <el-input v-model="form.username" style="width: 80%"></el-input>
           </el-form-item>
+          <el-form-item label="密码">
+            <el-input v-model="form.password" style="width: 80%"></el-input>
+          </el-form-item>
          <el-form-item label="昵称">
             <el-input v-model="form.nickName" style="width: 80%"></el-input>
           </el-form-item>
          <el-form-item label="年龄">
             <el-input v-model="form.age" style="width: 80%"></el-input>
-          </el-form-item>
+         </el-form-item>
          <el-form-item label="性别">
             <el-radio v-model="form.gender" label="男">男</el-radio>
             <el-radio v-model="form.gender" label="女">女</el-radio>
             <el-radio v-model="form.gender" label="未知">未知</el-radio>
+         </el-form-item>
+          <el-form-item label="账号类型">
+            <el-radio v-model="form.role" :label="1" :disabled="true">管理员</el-radio>
+            <el-radio v-model="form.role" :label="2" :disabled="true">普通用户</el-radio>
           </el-form-item>
         </el-form>
         <template #footer>
@@ -110,7 +123,7 @@ export default {
     //新增用户弹窗
     add(){
       this.dialogVisible=true;
-      this.form={}; //清空之前的表单域
+      this.form={gender:'未知',role:2}; //清空之前的表单域
     },
     //保存修改或新增用户
     save(){
@@ -146,6 +159,7 @@ export default {
     //编辑
     handleEdit(row){
       this.form=JSON.parse(JSON.stringify(row)) //将行对象深拷贝到form
+      console.log(this.form)
       this.dialogVisible=true; //显示表单
     },
     handleDelete(id){

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from "../src/router";
 
 //创建request对象
 const request = axios.create({
@@ -6,19 +7,25 @@ const request = axios.create({
     timeout: 5000
 })
 
+// 请求白名单，如果请求在白名单里面，将不会被拦截校验权限
+const whiteUrls = ["/user/login", '/user/register']
+
 // request 拦截器
 // 可以自请求发送前对请求做一些处理
 // 比如统一加token，对请求参数统一加密
 request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
 
-    //取出sessionStorage中缓存的用户信息
-    // let userJSON = sessionStorage.getItem("user");
-    // if(!userJSON) {
-    //     router.push('/login')
-    // }
-
-    // config.headers['token'] = user.token;  // 设置请求头
+    // 取出sessionStorage里面缓存的用户信息
+    let userJson = sessionStorage.getItem("user")
+    if (!whiteUrls.includes(config.url)) {  // 校验请求白名单
+        if(!userJson) {
+            router.push("/login")
+        } else {
+            let user = JSON.parse(userJson);
+            config.headers['token'] = user.token;  // 设置请求头
+        }
+    }
     return config
 }, error => {
     return Promise.reject(error)
@@ -36,6 +43,11 @@ request.interceptors.response.use(
         // 兼容服务端返回的字符串数据
         if (typeof res === 'string') {
             res = res ? JSON.parse(res) : res
+        }
+        // 验证token
+        if (res.code === '401') {
+            console.error("token过期，重新登录")
+            router.push("/login")
         }
         return res;
     },
