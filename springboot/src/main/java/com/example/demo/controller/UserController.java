@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.Result;
 import com.example.demo.entity.User;
 import com.example.demo.mapper.UserMapper;
+import com.example.demo.utils.TokenUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -16,7 +17,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends BaseController {
 
     @Resource
     UserMapper userMapper;
@@ -24,9 +25,20 @@ public class UserController {
     //新增用户
     @PostMapping
     public Result<?> save(@RequestBody User user){
-        if(user.getPassword()==null){
-            user.setPassword("123456");
-        }
+        if(getUser().getRole()!=1) return Result.error("402","当前用户无权限进行该操作");
+
+        //校验注册数据合法性
+        Result res = User.validate(user);
+        if(res.getCode().equals("-1")) return res;
+
+        //校验用户名是否存在
+        User u=userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername,user.getUsername()));
+        if(u!=null) return Result.error("-1","该用户名已被注册");
+
+        //校验昵称是否存在
+        u=userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getNickName,user.getNickName()));
+        if(u!=null) return Result.error("-2","该昵称已被注册");
+
         userMapper.insert(user);
         return Result.success();
     }
@@ -34,6 +46,7 @@ public class UserController {
     //更新用户
     @PutMapping
     public Result<?> update(@RequestBody User user){
+        if(getUser().getRole()!=1) return Result.error("402","当前用户无权限进行该操作");
         userMapper.updateById(user);
         return Result.success();
     }
@@ -41,8 +54,17 @@ public class UserController {
     //删除用户
     @DeleteMapping("/{id}") //占位符 /{aa}/{bb} ==> (@PathVariable aa的类型 aa,@PathVariable bb的类型 bb)
     public Result<?> delete(@PathVariable Long id){
+        if(getUser().getRole()!=1) return Result.error("402","当前用户无权限进行该操作");
         userMapper.deleteById(id);
         return Result.success();
+    }
+
+    //查询用户
+    @GetMapping("/{id}")
+    public Result<User> selectById(@PathVariable Integer id){
+        User u=userMapper.selectById(id);
+        u.setPassword(null);
+        return Result.success(u);
     }
 
     //分页查询
@@ -50,17 +72,27 @@ public class UserController {
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum, //页码
                               @RequestParam(defaultValue = "10") Integer pageSize, //项目条数
                               @RequestParam(defaultValue = "") String keyWords){ //搜索关建字
+
+        if(getUser().getRole()!=1) return Result.error("402","普通用户无权浏览后台网站");
+
         LambdaQueryWrapper<User> wrapper= Wrappers.<User>lambdaQuery();
         if(StrUtil.isNotBlank(keyWords)) wrapper.like(User::getNickName,keyWords); //输入不为空才使用like模糊查询
-        Page<User> userPage= userMapper.selectPage(new Page<>(pageNum,pageSize), wrapper.select(User::getId,User::getUsername,User::getNickName,User::getAge,User::getGender));
+        Page<User> userPage= userMapper.selectPage(new Page<>(pageNum,pageSize), wrapper.select(
+                User::getId,User::getUsername,User::getNickName,User::getAge,User::getGender,User::getRole
+        ));
         return Result.success(userPage);
     }
 
     //登录
     @PostMapping("/login")
     public Result<User> login(@RequestBody User user){
-        User res=userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername,user.getUsername()).eq(User::getPassword,user.getPassword()));
+        User res=userMapper.selectOne(Wrappers.<User>lambdaQuery()
+                .eq(User::getUsername,user.getUsername())
+                .eq(User::getPassword,user.getPassword()));
+
         if(res==null) return Result.error("-1","用户名或密码错误");
+        String token= TokenUtils.genToken(res);
+        res.setToken(token);
         res.setPassword(null);
         return Result.success(res);
     }
@@ -87,6 +119,8 @@ public class UserController {
     //保存头像
     @PostMapping("/avatar")
     public Result<?> saveAvatar(@RequestBody User user){
+        if(getUser().getId()!=user.getId()) return Result.error("402","当前用户无权限进行该操作");
+
         User res=userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getUsername,user.getUsername()));
         if(res==null) return Result.error("-1","头像保存失败");
 

@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.example.demo.common.Result;
@@ -17,6 +18,10 @@ public class User {
     private String nickName;
     private Integer age;
     private String avatarSrc;
+    private Integer role;
+
+    @TableField(exist = false)
+    private String token;
 
     public static Result<?> validate(User u){
         if(u.getUsername()==null||u.getUsername().length()<2||u.getUsername().length()>18) return Result.error("-1","非法用户名");
