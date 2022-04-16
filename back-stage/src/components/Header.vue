@@ -38,8 +38,8 @@ export default {
     load(){
       //session中取出user信息
       let user=JSON.parse(sessionStorage.getItem("user"))
-      if(!!user&&user?.nickName?.length>0) {
-        this.nickName = user.nickName
+      if(!!user) {
+        this.nickName = user.id+"号管理员"
         this.isLogin=true;
       }
       else {
