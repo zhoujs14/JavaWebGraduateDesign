@@ -9,23 +9,21 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName ("blog")
+@TableName ("comment")
 @Data
-public class Blog {
+public class Comment {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
-    private String title;
-    private String content;
+    private Integer type;
     private Integer authorId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date time;
-    private Integer cateId;
+    private String comment;
     private Integer like;
-    private Integer watched;
 
     @TableField(exist = false)
     private String authorName;
 
     @TableField(exist = false)
-    private String cateName;
+    private String typeName;
 }

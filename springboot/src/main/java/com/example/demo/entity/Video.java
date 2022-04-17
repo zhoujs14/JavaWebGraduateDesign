@@ -9,17 +9,19 @@ import lombok.Data;
 
 import java.util.Date;
 
-@TableName ("blog")
+@TableName ("video")
 @Data
-public class Blog {
+public class Video{
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
-    private String title;
-    private String content;
     private Integer authorId;
+    private Integer cateId;
+    private Integer locationId;
+    private String uuid;
+    private String title;
+    private String brief;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date time;
-    private Integer cateId;
     private Integer like;
     private Integer watched;
 
@@ -28,4 +30,7 @@ public class Blog {
 
     @TableField(exist = false)
     private String cateName;
+
+    @TableField(exist = false)
+    private String locationName;
 }
