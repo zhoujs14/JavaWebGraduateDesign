@@ -7,14 +7,14 @@
           router
       >
 <!-- el-menu 加上router属性后 menu-item的index即跳转路由 -->
-        <el-sub-menu index="1" v-if="true">
+        <el-sub-menu index="1" v-if="user?.level<3">
           <template #title>账号管理</template>
           <el-menu-item index="admin">管理员管理</el-menu-item>
           <el-menu-item index="user">用户管理</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="blog">文章管理</el-menu-item>
         <el-menu-item index="video">视频管理</el-menu-item>
-        <el-menu-item index="cate">类别管理</el-menu-item>
+        <el-menu-item index="cate" v-if="this?.level<2">类别管理</el-menu-item>
       </el-menu>
 </template>
 
@@ -45,7 +45,7 @@ export default {
     let userStr=sessionStorage.getItem("user") || "{}"
     this.user=JSON.parse(userStr)
 
-    request.get("/user/"+this.user.id).then(res=>{
+    request.get("/admin/"+this.user.id).then(res=>{
       if(res?.code==='0'){
         this.user=res.data
       }

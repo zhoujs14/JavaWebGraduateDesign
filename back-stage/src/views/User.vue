@@ -16,12 +16,6 @@
       <el-table-column prop="nickName" label="昵称" />
       <el-table-column prop="age" label="年龄" />
       <el-table-column prop="gender" label="性别" />
-      <el-table-column label="角色">
-        <template #default="scope">
-          <span v-if="scope.row.role===1">管理员</span>
-          <span v-if="scope.row.role===2">普通用户</span>
-        </template>
-      </el-table-column>
       <el-table-column fixed="right" label="操作" width="120">
         <template #default="scope">
           <el-button @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
@@ -52,7 +46,7 @@
             <el-input v-model="form.username" style="width: 80%"></el-input>
           </el-form-item>
           <el-form-item label="密码">
-            <el-input v-model="form.password" style="width: 80%"></el-input>
+            <el-input v-model="form.password" show-password style="width: 80%" ></el-input>
           </el-form-item>
          <el-form-item label="昵称">
             <el-input v-model="form.nickName" style="width: 80%"></el-input>
@@ -65,10 +59,6 @@
             <el-radio v-model="form.gender" label="女">女</el-radio>
             <el-radio v-model="form.gender" label="未知">未知</el-radio>
          </el-form-item>
-          <el-form-item label="账号类型">
-            <el-radio v-model="form.role" :label="1" :disabled="true">管理员</el-radio>
-            <el-radio v-model="form.role" :label="2" :disabled="true">普通用户</el-radio>
-          </el-form-item>
         </el-form>
         <template #footer>
           <span class="dialog-footer">

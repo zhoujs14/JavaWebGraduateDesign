@@ -95,7 +95,6 @@ export default {
     //注册
     register(){
       this.$refs["form"].validate(valid=>{
-        console.log("valid="+valid)
         if(valid){
           request.post("/user/register",this.form).then(res=>{
             console.log("res")

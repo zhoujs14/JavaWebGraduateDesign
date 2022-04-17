@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.Result;
-import com.example.demo.entity.Account;
 import com.example.demo.entity.Admin;
 import com.example.demo.mapper.AdminMapper;
 import com.example.demo.utils.TokenUtils;
@@ -26,13 +25,18 @@ public class AdminController extends BaseController {
     //新增管理员
     @PostMapping
     public Result<?> save(@RequestBody Admin admin){
-        if(getAdmin().getLevel()>1) return Result.error("-1","权限不足");
+        Integer operatorLv=getAdmin().getLevel();
+        if(operatorLv>1) return Result.error("-1","权限不足");
+
+        //校验数据是否合法
+        Result res=Admin.validate(admin);
+        if(res.getCode().equals("-1")) return res;
 
         //校验用户名是否存在
-        Admin u=adminMapper.selectOne(Wrappers.<Admin>lambdaQuery().eq(Admin::getUsername,admin.getUsername()));
-        if(u!=null) return Result.error("-1","该用户名已被注册");
+        Admin sameUsername=adminMapper.selectOne(Wrappers.<Admin>lambdaQuery().eq(Admin::getUsername,admin.getUsername()));
+        if(sameUsername!=null) return Result.error("-1","该用户名已被注册");
 
-        if(u.getLevel()<=getAdmin().getLevel()) return Result.error("-1","不可创建同级或更高级管理员");
+        if(operatorLv==1&&admin.getLevel()<=1) return Result.error("-1","不可创建同级或更高级管理员");
 
         adminMapper.insert(admin);
         return Result.success();
@@ -52,6 +56,7 @@ public class AdminController extends BaseController {
     public Result<?> delete(@PathVariable Long id){
         Integer level=getAdmin().getLevel();
         Admin res=adminMapper.selectById(id);
+        if(res==null) return Result.error("-1","无该管理员");
         if(level>1||level>=res.getLevel()) return Result.error("-1","权限不足");
         adminMapper.deleteById(id);
         return Result.success();
@@ -95,5 +100,12 @@ public class AdminController extends BaseController {
         res.setToken(token);
         res.setPassword(null);
         return Result.success(res);
+    }
+
+    @GetMapping("/getLevel")
+    public Result<Integer> getLevel(){
+        Admin res=getAdmin();
+        if(res!=null&&res.getLevel()!=null) return Result.success(res.getLevel());
+        else return Result.error("401","未获取到权限等级");
     }
 }

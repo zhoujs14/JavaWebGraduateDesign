@@ -8,7 +8,7 @@ const request = axios.create({
 })
 
 // 请求白名单，如果请求在白名单里面，将不会被拦截校验权限
-const whiteUrls = ["/user/login", '/user/register']
+const whiteUrls = ["/admin/login"]
 
 // request 拦截器
 // 可以自请求发送前对请求做一些处理

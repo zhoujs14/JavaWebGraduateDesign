@@ -40,4 +40,13 @@ public class BaseController {
         Integer userId = Integer.valueOf(aud);
         return userMapper.selectById(userId);
     }
+
+    public Account getAccount(){
+        String token = request.getHeader("token");
+        String aud = JWT.decode(token).getAudience().get(0);
+        String type=JWT.decode(token).getClaim("type").asString();
+        if(type.equals("admin"))
+            return adminMapper.selectById(Integer.valueOf(aud));
+        return userMapper.selectById(Integer.valueOf(aud));
+    }
 }

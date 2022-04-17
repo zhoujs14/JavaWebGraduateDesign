@@ -8,6 +8,11 @@ const routes = [
     redirect:'/user',
     children:[
       {
+        path:'admin',
+        name:'admin',
+        component:()=>import("../views/Admin")
+      },
+      {
         path:'user',
         name:'user',
         component:()=>import("../views/User")
@@ -23,11 +28,6 @@ const routes = [
     path: '/login',
     name:'login',
     component: ()=>import("../views/Login")
-  },
-  {
-    path: '/profile',
-    name:'profile',
-    component:()=>import("../views/Profile")
   }
 ]
 

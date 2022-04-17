@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.Result;
+import com.example.demo.entity.Account;
 import com.example.demo.entity.User;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.utils.TokenUtils;
@@ -25,7 +26,7 @@ public class UserController extends BaseController {
     //新增用户
     @PostMapping
     public Result<?> save(@RequestBody User user){
-        if(getUser().getRole()!=1) return Result.error("402","当前用户无权限进行该操作");
+        if(getAdmin()!=null&&getAdmin().getLevel()>2) return Result.error("402","当前用户无权限进行该操作");
 
         //校验注册数据合法性
         Result res = User.validate(user);
@@ -46,15 +47,23 @@ public class UserController extends BaseController {
     //更新用户
     @PutMapping
     public Result<?> update(@RequestBody User user){
-        if(getUser().getRole()!=1) return Result.error("402","当前用户无权限进行该操作");
-        userMapper.updateById(user);
-        return Result.success();
+        Account a=getAccount();
+        if(a.getType().equals("admin")){
+            if(getAdmin().getLevel()>2) return Result.error("402","当前用户权限不足");
+            userMapper.updateById(user);
+            return Result.success();
+        }
+        else if(a.getType().equals("user")&&getUser().getId()==user.getId()){
+            userMapper.updateById(user);
+            return Result.success();
+        }
+        else return Result.error("403","账号类型错误");
     }
 
     //删除用户
     @DeleteMapping("/{id}") //占位符 /{aa}/{bb} ==> (@PathVariable aa的类型 aa,@PathVariable bb的类型 bb)
     public Result<?> delete(@PathVariable Long id){
-        if(getUser().getRole()!=1) return Result.error("402","当前用户无权限进行该操作");
+        if(!getAccount().getType().equals("admin")||getAdmin().getLevel()>2) return Result.error("402","当前用户权限不足");
         userMapper.deleteById(id);
         return Result.success();
     }
@@ -73,13 +82,11 @@ public class UserController extends BaseController {
                               @RequestParam(defaultValue = "10") Integer pageSize, //项目条数
                               @RequestParam(defaultValue = "") String keyWords){ //搜索关建字
 
-        if(getUser().getRole()!=1) return Result.error("402","普通用户无权浏览后台网站");
+        if(!getAccount().getType().equals("admin")||getAdmin().getLevel()>2) return Result.error("402","普通用户无权浏览后台网站");
 
         LambdaQueryWrapper<User> wrapper= Wrappers.<User>lambdaQuery();
         if(StrUtil.isNotBlank(keyWords)) wrapper.like(User::getNickName,keyWords); //输入不为空才使用like模糊查询
-        Page<User> userPage= userMapper.selectPage(new Page<>(pageNum,pageSize), wrapper.select(
-                User::getId,User::getUsername,User::getNickName,User::getAge,User::getGender,User::getRole
-        ));
+        Page<User> userPage= userMapper.selectPage(new Page<>(pageNum,pageSize), wrapper);
         return Result.success(userPage);
     }
 

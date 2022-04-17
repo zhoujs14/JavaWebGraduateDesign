@@ -35,7 +35,6 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         Integer id = Integer.valueOf(JWT.decode(token).getAudience().get(0));
         String type=JWT.decode(token).getClaim("type").asString();
-        System.out.println("accountType:"+type);
 
         Account a;
         if(type.equals("admin")) a=adminMapper.selectById(id);

@@ -16,10 +16,12 @@ public class User extends Account {
     private String nickName;
     private Integer age;
     private String avatarSrc;
-    private Integer role;
 
     @TableField(exist = false)
     private String token;
+
+    @TableField(exist = false)
+    private String type="user";
 
     public static Result<?> validate(User u){
         if(u.getUsername()==null||u.getUsername().length()<2||u.getUsername().length()>18) return Result.error("-1","非法用户名");
