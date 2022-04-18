@@ -65,10 +65,6 @@
             <el-radio v-model="form.gender" label="女">女</el-radio>
             <el-radio v-model="form.gender" label="未知">未知</el-radio>
          </el-form-item>
-          <el-form-item label="账号类型">
-            <el-radio v-model="form.role" :label="1" :disabled="true">管理员</el-radio>
-            <el-radio v-model="form.role" :label="2" :disabled="true">普通用户</el-radio>
-          </el-form-item>
         </el-form>
         <template #footer>
           <span class="dialog-footer">

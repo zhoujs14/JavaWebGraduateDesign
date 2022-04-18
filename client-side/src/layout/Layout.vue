@@ -1,9 +1,8 @@
 <!--主体框架-->
 <template>
-  <div>
+  <div style="width: 100%;height: 100%">
     <Header/>
-    <div style="display: flex">
-      <Aside/>
+    <div style="display: flex;padding: 0 200px;min-height: calc( 100vh - 50px )">
       <router-view style="flex: 1"/>
     </div>
   </div>
@@ -11,10 +10,9 @@
 
 <script>
 import Header from "../components/Header";
-import Aside from "../components/Aside";
 export default {
   name: "Layout",
-  components: {Aside, Header}
+  components: {Header}
 }
 </script>
 

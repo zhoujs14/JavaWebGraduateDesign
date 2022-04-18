@@ -1,25 +1,41 @@
 <template>
-  <div class="container">
-    <div class="navLeft">后台管理</div>
-    <div style="flex:1"></div>
-    <div class="navRight">
-      <el-dropdown>
-        <span class="userDropdown">
-          {{nickName}}<arrow-down style="height: 15px;width: 15px;padding-left: 5px"/>
-        </span>
-        <template #dropdown>
-          <el-dropdown-meum v-if="isLogin">
-            <el-dropdown-item  @click="()=>this.$router.push('/profile')">个人信息</el-dropdown-item>
-            <el-dropdown-item @click="exit">退出登录</el-dropdown-item>
-          </el-dropdown-meum>
-          <el-dropdown-meum v-if="!isLogin">
-            <el-dropdown-item  @click="()=>this.$router.push('/login')">登录</el-dropdown-item>
-            <el-dropdown-item @click="()=>this.$router.push('/register')">注册</el-dropdown-item>
-          </el-dropdown-meum>
-        </template>
-      </el-dropdown>
+  <header>
+    <div class="headerContent">
+      <div>
+        <span style="margin-right: 20px">家庭物品收纳整理学习网站</span>
+        <el-button type="text" @click="()=>this.$router.push('/')">首页</el-button>
+      </div>
+      <div class="contentRight">
+        <div>
+          <el-dropdown size="large">
+            <el-avatar :size="40" :src="user.avatarSrc" v-if="isLogin" />
+            <el-avatar :size="40" v-if="!isLogin">登录</el-avatar>
+            <template #dropdown>
+              <el-dropdown-menu v-if="isLogin">
+                <el-dropdown-item class="item" disabled><div style="display: flex;flex: 1;justify-content: center">{{user?.nickName||""}}</div></el-dropdown-item>
+                <el-dropdown-item class="item" @click="goToProfile"><div style="display: flex;flex: 1;justify-content: center">个人中心</div></el-dropdown-item>
+                <el-dropdown-item class="item" ><div style="display: flex;flex: 1;justify-content: center">投稿管理</div></el-dropdown-item>
+                <el-dropdown-item class="item" @click="exit" divided><div style="display: flex;flex: 1;justify-content: center">退出登录</div></el-dropdown-item>
+              </el-dropdown-menu>
+              <el-dropdown-menu v-if="!isLogin">
+                <el-dropdown-item @click="this.$router.push('/login')">登录</el-dropdown-item>
+                <el-dropdown-item @click="this.$router.push('/register')">注册</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+        <div class="column" style="margin-left: 15px" @click="goToProfile">
+          <el-icon :size="20" color="gray"><star/></el-icon>
+          <span style="font-size: 13px;color: gray">收藏</span>
+        </div>
+        <div class="column" style="margin-left: 15px" @click="goToProfile">
+          <el-icon :size="20" color="gray"><clock /></el-icon>
+          <span style="font-size: 13px;color: gray">历史</span>
+        </div>
+        <el-button id="contributeBtn" type="primary" size="middle"><el-icon :size="17" style="margin-right: 6px"><upload-filled /></el-icon>投稿</el-button>
+      </div>
     </div>
-  </div>
+  </header>
 </template>
 
 <script>
@@ -31,7 +47,8 @@ export default {
   data(){
     return {
       nickName:"",
-      isLogin:false
+      isLogin:false,
+      user:{avatarSrc: "https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"}
     }
   },
   methods:{
@@ -39,7 +56,7 @@ export default {
       //session中取出user信息
       let user=JSON.parse(sessionStorage.getItem("user"))
       if(!!user&&user?.nickName?.length>0) {
-        this.nickName = user.nickName
+        this.user=user
         this.isLogin=true;
       }
       else {
@@ -64,18 +81,32 @@ export default {
 </script>
 
 <style scoped>
-.container{
-  height: 50px; line-height: 50px;border-bottom: 1px solid #cccccc; display: flex;width: 100%;
+div {
+  font-size: 16px;
 }
-.navLeft{
-  width: 200px;padding-left: 30px;font-weight: bold;color: dodgerblue
-}
-.navRight{
-  padding-right: 30px
-}
-.userDropdown {
-  display: flex;
-  align-items: center;
+header {
+  width: 100%;
   height: 50px;
+  border-bottom: #cccccc 1px solid
+}
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  margin: 0 200px;
+}
+.contentRight {
+  display: flex;
+  align-items: center
+}
+#contributeBtn {
+  margin-left: 15px;
+  width: 75px;
+  height: 35px;
+}
+.item {
+  display: flex;
+  justify-content: center;
 }
 </style>
