@@ -14,7 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
         //拦截登录注册外的请求进行token验证
         registry.addInterceptor(authInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/user/login", "/user/register","/admin/login");
+                .excludePathPatterns("/user/login", "/user/register","/admin/login","/files/**");
     }
 
     @Override

@@ -45,6 +45,7 @@ public class UserController extends BaseController {
     }
 
     //更新用户
+    //注：设为null的字段传来也不会更新数据库，因此传来password=null没有关系
     @PutMapping
     public Result<?> update(@RequestBody User user){
         Account a=getAccount();

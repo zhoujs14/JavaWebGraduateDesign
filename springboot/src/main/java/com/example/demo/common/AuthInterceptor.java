@@ -31,6 +31,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         String token = request.getHeader("token");
         if (StrUtil.isBlank(token)) {
+            System.out.println("为获取token; request url:"+request.getRequestURI());
             throw new CustomException("401", "未获取到token, 请重新登录");
         }
         Integer id = Integer.valueOf(JWT.decode(token).getAudience().get(0));
