@@ -28,6 +28,8 @@ public class VideoController extends BaseController{
         if(getAccount().getType().equals("user")){
             video.setAuthorId(getAccount().getId());
         }
+        String localSrc=video.getSrc();
+        video.setSrc(localSrc.replace("files/","files/video/"));
         video.setTime(new Date()); //设置创建时间
         videoMapper.insert(video);
         return Result.success();
@@ -56,5 +58,15 @@ public class VideoController extends BaseController{
         if(StrUtil.isNotBlank(keyWords)) wrapper.like(Video::getTitle,keyWords); //输入不为空才使用like模糊查询
         Page<Video> videoPage= videoMapper.selectPage(new Page<>(pageNum,pageSize), wrapper);
         return Result.success(videoPage);
+    }
+
+    //根据id获取博客内容
+    @GetMapping("/{id}")
+    public Result<?> getById(@PathVariable Integer id){
+        Video v=videoMapper.selectById(id);
+        if(v!=null) {
+            return Result.success(v);
+        }
+        return Result.error("404","视频不见了");
     }
 }
