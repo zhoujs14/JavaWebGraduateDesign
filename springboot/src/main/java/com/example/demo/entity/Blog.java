@@ -20,8 +20,10 @@ public class Blog {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date time;
     private Integer cateId;
-    private Integer like;
+    private Integer likesCount;
     private Integer watched;
+    private String brief;
+    private String cover;
 
     @TableField(exist = false)
     private String authorName;

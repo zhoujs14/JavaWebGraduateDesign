@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.BlogMapper">
+    <resultMap id="blogMap" type="com.example.demo.entity.Blog">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="authorId" column="author_id"/>
+        <result property="time" column="time"/>
+        <result property="cateId" column="cate_id"/>
+        <result property="like" column="like"/>
+        <result property="watched" column="watched"/>
+        <result property="brief" column="brief"/>
+        <result property="cover" column="cover"/>
+        <result property="authorName" column="nick_name"/>
+    </resultMap>
+
+    <select id="findPage" resultMap="blogMap">
+        SELECT `blog`.* ,user.nick_name from `blog`
+        left join user on user.id = blog.author_id
+    </select>
+</mapper>

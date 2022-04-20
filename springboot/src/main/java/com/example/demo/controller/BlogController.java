@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.demo.common.Result;
 import com.example.demo.entity.Blog;
 import com.example.demo.mapper.BlogMapper;
+import com.example.demo.mapper.UserMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -17,14 +18,20 @@ import java.util.Date;
  */
 @RestController
 @RequestMapping("/blog")
-public class BlogController {
+public class BlogController extends BaseController{
 
     @Resource
     BlogMapper blogMapper;
 
+    @Resource
+    UserMapper userMapper;
+
     //新增博客
     @PostMapping
     public Result<?> save(@RequestBody Blog blog){
+        if(getAccount().getType().equals("user")){
+            blog.setAuthorId(getAccount().getId());
+        }
         blog.setTime(new Date()); //设置创建时间
         blogMapper.insert(blog);
         return Result.success();
@@ -39,9 +46,19 @@ public class BlogController {
 
     //删除博客
     @DeleteMapping("/{id}") //占位符 /{aa}/{bb} ==> (@PathVariable aa的类型 aa,@PathVariable bb的类型 bb)
-    public Result<?> delete(@PathVariable Long id){
+    public Result<?> delete(@PathVariable Integer id){
         blogMapper.deleteById(id);
         return Result.success();
+    }
+
+    //根据id获取博客内容
+    @GetMapping("/{id}")
+    public Result<?> getById(@PathVariable Integer id){
+        Blog b=blogMapper.selectById(id);
+        if(b!=null) {
+            return Result.success(b);
+        }
+        return Result.error("404","文章不见了");
     }
 
     //分页查询
@@ -51,7 +68,7 @@ public class BlogController {
                               @RequestParam(defaultValue = "") String keyWords){ //搜索关建字
         LambdaQueryWrapper<Blog> wrapper= Wrappers.<Blog>lambdaQuery();
         if(StrUtil.isNotBlank(keyWords)) wrapper.like(Blog::getTitle,keyWords); //输入不为空才使用like模糊查询
-        Page<Blog> blogPage= blogMapper.selectPage(new Page<>(pageNum,pageSize), wrapper);
+        Page<Blog> blogPage= blogMapper.findPage(new Page<>(pageNum,pageSize));
         return Result.success(blogPage);
     }
 }

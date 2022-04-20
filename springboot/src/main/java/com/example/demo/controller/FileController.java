@@ -6,15 +6,25 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSON;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
+import com.example.demo.common.NonStaticResourceHttpRequestHandler;
 import com.example.demo.common.Result;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -26,6 +36,9 @@ public class FileController {
     @Value("9090")
     private String port;
     private static final String ip="http://localhost";
+
+    @Autowired
+    private NonStaticResourceHttpRequestHandler nonStaticResourceHttpRequestHandler;
 
     /**
      * 文件上传接口
@@ -109,7 +122,43 @@ public class FileController {
                 os.close();
             }
         }catch (Exception e){
-            System.out.println("下载文件失败");
+            System.out.println("下载文件失败"+e.getMessage());
+        }
+    }
+
+    /**
+     * 视频下载接口
+     * @param response
+     * @param uuid
+     */
+    @GetMapping("/video/{uuid}")
+    public void getVideo(HttpServletRequest request, HttpServletResponse response, @PathVariable String uuid) throws IOException, ServletException {
+        String basePath=System.getProperty("user.dir")+"/springboot/src/main/resources/files/"; //获取上传路径
+        List<String> fileNames=FileUtil.listFileNames(basePath);
+        String fileName=fileNames.stream().filter(name->name.contains(uuid)).findAny().orElse("");
+
+        if(StrUtil.isNotEmpty(fileName)){
+            //获取编译后 resources 文件夹的绝对地址
+            String sourcePath = ClassUtils.getDefaultClassLoader().getResource("").getPath().substring(1);
+            String realPath = sourcePath +"files/"+fileName;
+
+            Path filePath = Paths.get(realPath);
+
+            if (Files.exists(filePath)) {
+                String mimeType = Files.probeContentType(filePath);
+                if (StrUtil.isNotEmpty(mimeType)) {
+                    response.setContentType(mimeType);
+                }
+                request.setAttribute(NonStaticResourceHttpRequestHandler.ATTR_FILE, filePath);
+                nonStaticResourceHttpRequestHandler.handleRequest(request, response);
+            } else {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+            }
+        }
+        else {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         }
     }
 

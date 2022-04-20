@@ -63,7 +63,7 @@ public class UserController extends BaseController {
 
     //删除用户
     @DeleteMapping("/{id}") //占位符 /{aa}/{bb} ==> (@PathVariable aa的类型 aa,@PathVariable bb的类型 bb)
-    public Result<?> delete(@PathVariable Long id){
+    public Result<?> delete(@PathVariable Integer id){
         if(!getAccount().getType().equals("admin")||getAdmin().getLevel()>2) return Result.error("402","当前用户权限不足");
         userMapper.deleteById(id);
         return Result.success();
