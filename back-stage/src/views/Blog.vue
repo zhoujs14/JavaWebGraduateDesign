@@ -148,7 +148,7 @@ export default {
     add(){
       //获取当前登录用户
       let user=JSON.parse(sessionStorage.getItem("user"));
-      if(user&&user?.id>0){
+      if(user&&!!user.id){
         this.dialogVisible=true;
         this.form={
           authorId:user.id //将用户id存入表单
