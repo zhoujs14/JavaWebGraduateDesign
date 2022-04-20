@@ -1,0 +1,61 @@
+<template>
+  <el-row style="padding: 30px 0">
+    <!-- 作者信息卡片  -->
+    <el-col :span="4">
+      <el-card style="margin-right: 8px;display: flex;flex-direction: column;align-items: center">
+        <div style="display: flex;justify-content: center;margin-bottom: 8px"><el-avatar :src="author.avatarSrc"/></div>
+        <div>{{author.nickName}}</div>
+      </el-card>
+    </el-col>
+    <!--  正文容器    -->
+    <el-col :span="16">
+      <el-card>
+        <h1>{{currentVideo.title}}</h1>
+        <div class="time">{{currentVideo.time}}</div>
+        <div id="mse"></div>
+      </el-card>
+      <el-card style="margin-top: 20px">
+        评论
+      </el-card>
+    </el-col>
+    <el-col :span="4">
+
+    </el-col>
+  </el-row>
+</template>
+
+<script>
+import Player from 'xgplayer'
+
+export default {
+  name: "Video",
+  data(){
+    return {
+      author:{
+        avatarSrc:'',
+        nickName:'视频作者'
+      },
+      currentVideo:{
+        title:"视频名称",
+        time:"yyyy-mm-dd"
+      }
+    }
+  },
+  mounted() {
+    let player = new Player({
+      id: 'mse',
+      url: "http://localhost:9090/files/video/7ad8aac8964b43a0895abee8595813d2",
+      fluid: true, //流式布局
+      poster: 'http://localhost:9090/files/6dd5e44383a645308b67dcafd692db93' //封面
+    });
+  }
+}
+</script>
+
+<style scoped>
+.time {
+  margin-top: 6px;
+  font-size: 14px;
+  color: dimgray
+}
+</style>

@@ -13,20 +13,25 @@ const routes = [
         component:()=>import("../views/Home")
       },
       {
-        path:'user',
-        name:'user',
-        component:()=>import("../views/User")
+        path: '/profile',
+        name:'profile',
+        component:()=>import("../views/Profile")
       },
       {
-        path:'blog',
+        path: '/upload',
+        name:'upload',
+        component:()=>import("../views/Upload")
+      },
+      {
+        path: '/blog',
         name:'blog',
         component:()=>import("../views/Blog")
       },
       {
-        path: '/profile',
-        name:'profile',
-        component:()=>import("../views/Profile")
-      }
+        path: '/video',
+        name:'video',
+        component:()=>import("../views/Video")
+      },
     ]
   },
   {

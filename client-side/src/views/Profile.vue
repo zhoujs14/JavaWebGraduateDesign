@@ -38,11 +38,9 @@
 </template>
 
 <script>
-import Header from "../components/Header";
 import request from "../../utils/request";
 export default {
   name: "profile",
-  components: {Header},
   data(){
     return {
       user:{
@@ -88,8 +86,5 @@ export default {
 </script>
 
 <style>
-.center{
-  justify-content: center;
-  margin-bottom: 12px;
-}
+
 </style>

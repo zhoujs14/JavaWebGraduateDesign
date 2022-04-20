@@ -1,31 +1,23 @@
 <template>
-  <div style="display:flex;flex:1">
-      <el-tabs type="border-card" style="flex:1">
-        <el-tab-pane>
+  <div style="display:flex;flex:1;padding-top: 18px">
+      <el-tabs type="border-card" style="flex:1" v-model="activeName">
+        <el-tab-pane name="blog">
           <template #label>
             <span class="tab">
               <el-icon style="margin-right: 5px"><reading /></el-icon>
               <span>图文教程</span>
             </span>
           </template>
-          <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
-            <li v-for="i in count" :key="i" class="infinite-list-item">
-              <Card/>
-            </li>
-          </ul>
+          <CardList type="blog"/>
         </el-tab-pane>
-        <el-tab-pane>
+        <el-tab-pane name="video">
           <template #label>
             <span class="tab">
               <el-icon style="margin-right: 5px"><video-play /></el-icon>
               <span>视频教程</span>
             </span>
           </template>
-            <ul v-infinite-scroll="load2" class="infinite-list" style="overflow: auto">
-              <li v-for="i in count2" :key="i" class="infinite-list-item">
-                <Card/>
-              </li>
-            </ul>
+          <CardList type="video"/>
         </el-tab-pane>
       </el-tabs>
   </div>
@@ -33,24 +25,16 @@
 
 <script>
 import Card from "../components/Card";
+import CardList from "../components/CardList";
 export default {
   name: "Home",
-  components: {Card},
+  components: {CardList, Card},
   data(){
     return {
-      count:3,
-      count2:3,
+      activeName:'blog'
     }
   },
   methods:{
-    load(){
-      if(this.count>30) return
-      this.count += 2;
-    },
-    load2(){
-      if(this.count2>30) return
-      this.count2 += 2
-    }
   }
 }
 </script>

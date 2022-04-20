@@ -1,56 +1,41 @@
 <template>
-  <el-container>
-    <el-header style="padding: 0">
-      <Header/>
-    </el-header>
-    <el-main>
-      <div style="width: 40%;margin: 0 auto">
-        <el-card>
-          <template #header>
-            <span>我的信息</span>
+  <div style="flex: 1">
+    <el-card style="width: 90%;margin: 24px auto 0">
+      <template #header>
+        <span>上传投稿</span>
+      </template>
+      <el-tabs style="flex:1">
+        <el-tab-pane>
+          <template #label>
+            <span class="tab">
+              <el-icon style="margin-right: 5px"><reading /></el-icon>
+              <span>图文教程</span>
+            </span>
           </template>
-          <!--头像-->
-          <div style="display: flex;justify-content: center">
-            <el-upload :show-file-list="false" action="http://localhost:9090/files/upload" :on-success="fileUploadSuccess">
-              <el-avatar :src="user.avatarSrc" :size="80"></el-avatar>
-            </el-upload>
-          </div>
-          <!--个人信息修改-->
-          <div style="margin-top: 24px">
-            <el-form :model="user" label-width="120px" >
-              <el-form-item label="用户名">
-                {{user.username}}
-              </el-form-item>
-              <el-form-item label="昵称">
-                <el-input v-model="user.nickName" style="width: 80%"></el-input>
-              </el-form-item>
-              <el-form-item label="年龄">
-                <el-input v-model="user.age" style="width: 80%"></el-input>
-              </el-form-item>
-              <el-form-item label="性别">
-                <el-radio v-model="user.gender" label="男">男</el-radio>
-                <el-radio v-model="user.gender" label="女">女</el-radio>
-                <el-radio v-model="user.gender" label="未知">未知</el-radio>
-              </el-form-item>
-            </el-form>
-            <el-divider/>
-            <div style="display: flex;justify-content: center">
-              <el-button type="primary" @click="save">保存</el-button>
-            </div>
-          </div>
-        </el-card>
-      </div>
-    </el-main>
-  </el-container>
+          <BlogEditor/>
+        </el-tab-pane>
+        <el-tab-pane>
+          <template #label>
+            <span class="tab">
+              <el-icon style="margin-right: 5px"><video-play /></el-icon>
+              <span>视频教程</span>
+            </span>
+          </template>
+          <VideoUploader/>
+        </el-tab-pane>
+      </el-tabs>
+    </el-card>
+  </div>
 </template>
 
 <script>
-import Header from "../components/Header";
 import request from "../../utils/request";
+import BlogEditor from "../components/BlogEditor";
+import VideoUploader from "../components/VideoUploader";
 
 export default {
   name: "Upload",
-  components: {Header},
+  components: {VideoUploader, BlogEditor},
   data(){
     return {
       user:{
@@ -95,9 +80,9 @@ export default {
 }
 </script>
 
-<style>
-.center{
-  justify-content: center;
-  margin-bottom: 12px;
+<style scoped>
+.tab {
+  display: flex;
+  align-items: center;
 }
 </style>

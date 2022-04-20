@@ -1892,6 +1892,11 @@
   "resolved" "https://registry.nlark.com/alphanum-sort/download/alphanum-sort-1.0.2.tgz"
   "version" "1.0.2"
 
+"amdefine@>=0.0.4":
+  "integrity" "sha512-S2Hw0TtNkMJhIabBwIojKL9YHO5T0n5eNqWJ7Lrlel/zDbftQpxpapi8tZs3X1HWa+u+QeydGmzzNU0m09+Rcg=="
+  "resolved" "https://registry.npmmirror.com/amdefine/-/amdefine-1.0.1.tgz"
+  "version" "1.0.1"
+
 "ansi-colors@^3.0.0":
   "integrity" "sha1-46PaS/uubIapwoViXeEkojQCb78="
   "resolved" "https://registry.nlark.com/ansi-colors/download/ansi-colors-3.2.4.tgz"
@@ -2556,7 +2561,7 @@
   "resolved" "https://registry.nlark.com/caseless/download/caseless-0.12.0.tgz"
   "version" "0.12.0"
 
-"chalk@^2.0.0", "chalk@^2.0.1", "chalk@^2.4.1", "chalk@^2.4.2":
+"chalk@^2.0.0", "chalk@^2.0.1", "chalk@^2.3.2", "chalk@^2.4.1", "chalk@^2.4.2":
   "integrity" "sha1-zUJUFnelQzPPVBpJEIwUMrRMlCQ="
   "resolved" "https://registry.npmmirror.com/chalk/download/chalk-2.4.2.tgz"
   "version" "2.4.2"
@@ -2792,7 +2797,7 @@
   dependencies:
     "delayed-stream" "~1.0.0"
 
-"commander@^2.18.0", "commander@^2.20.0":
+"commander@^2.15.1", "commander@^2.18.0", "commander@^2.20.0":
   "integrity" "sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ=="
   "resolved" "https://registry.npmmirror.com/commander/download/commander-2.20.3.tgz"
   "version" "2.20.3"
@@ -3226,6 +3231,13 @@
     "es5-ext" "^0.10.50"
     "type" "^1.0.1"
 
+"danmu.js@^0.5.9":
+  "integrity" "sha512-zLpSd5Yi+fxVVd0GHjrf5lZA45KKpbvc4Q8BbSVO3OdmCBkoB2vlDCGnVn18cnKpTNqi8Soy7AnzUw1YcqtzUA=="
+  "resolved" "https://registry.npmmirror.com/danmu.js/-/danmu.js-0.5.10.tgz"
+  "version" "0.5.10"
+  dependencies:
+    "event-emitter" "^0.3.5"
+
 "dashdash@^1.12.0":
   "integrity" "sha1-hTz6D3y+L+1d4gMmuN1YEDX24vA="
   "resolved" "https://registry.nlark.com/dashdash/download/dashdash-1.14.1.tgz"
@@ -3515,6 +3527,19 @@
   "resolved" "https://registry.nlark.com/dotenv/download/dotenv-8.6.0.tgz"
   "version" "8.6.0"
 
+"downloadjs@1.4.7":
+  "integrity" "sha512-LN1gO7+u9xjU5oEScGFKvXhYf7Y/empUIIEAGBs1LzUq/rg5duiDrkuH5A2lQGd5jfMOb9X9usDa2oVXwJ0U/Q=="
+  "resolved" "https://registry.npmmirror.com/downloadjs/-/downloadjs-1.4.7.tgz"
+  "version" "1.4.7"
+
+"draggabilly@^2.2.0":
+  "integrity" "sha512-HHHLPEPZqRXIDQDFRFdK7RONZausNlJ4WkA73ST7Z6O2HPWttxFHVwHo8nccuDLzXWwiVKRVuc6fTkW+CQA++A=="
+  "resolved" "https://registry.npmmirror.com/draggabilly/-/draggabilly-2.4.1.tgz"
+  "version" "2.4.1"
+  dependencies:
+    "get-size" "^2.0.2"
+    "unidragger" "^2.4.0"
+
 "duplexer@^0.1.1":
   "integrity" "sha1-Or5DrvODX4rgd9E23c4PJ2sEAOY="
   "resolved" "https://registry.nlark.com/duplexer/download/duplexer-0.1.2.tgz"
@@ -3742,6 +3767,11 @@
   "resolved" "https://registry.npm.taobao.org/esprima/download/esprima-4.0.1.tgz"
   "version" "4.0.1"
 
+"esprima@~1.2.2":
+  "integrity" "sha512-S9VbPDU0adFErpDai3qDkjq8+G05ONtKzcyNrPKg/ZKa+tf879nX2KexNU95b31UoTJjRLInNBHHHjFPoCd7lQ=="
+  "resolved" "https://registry.npmmirror.com/esprima/-/esprima-1.2.5.tgz"
+  "version" "1.2.5"
+
 "esrecurse@^4.1.0":
   "integrity" "sha1-eteWTWeauyi+5yzsY3WLHF0smSE="
   "resolved" "https://registry.nlark.com/esrecurse/download/esrecurse-4.3.0.tgz"
@@ -3774,6 +3804,11 @@
   "resolved" "https://registry.nlark.com/etag/download/etag-1.8.1.tgz"
   "version" "1.8.1"
 
+"ev-emitter@^1.0.1":
+  "integrity" "sha512-ipiDYhdQSCZ4hSbX4rMW+XzNKMD1prg/sTvoVmSLkuQ1MVlwjJQQA+sW8tMYR3BLUr9KjodFV4pvzunvRhd33Q=="
+  "resolved" "https://registry.npmmirror.com/ev-emitter/-/ev-emitter-1.1.1.tgz"
+  "version" "1.1.1"
+
 "event-emitter@^0.3.5":
   "integrity" "sha512-D9rRn9y7kLPnJ+hMq7S/nhvoKwwvVJahBi2BPmx3bvbsEdK3W9ii8cBSGjP+72/LnM4n6fo3+dkCX5FeTQruXA=="
   "resolved" "https://registry.npmmirror.com/event-emitter/-/event-emitter-0.3.5.tgz"
@@ -3787,7 +3822,7 @@
   "resolved" "https://registry.nlark.com/event-pubsub/download/event-pubsub-4.3.0.tgz"
   "version" "4.3.0"
 
-"eventemitter3@^4.0.0":
+"eventemitter3@^4.0.0", "eventemitter3@^4.0.7":
   "integrity" "sha1-Lem2j2Uo1WRO9cWVJqG0oHMGFp8="
   "resolved" "https://registry.nlark.com/eventemitter3/download/eventemitter3-4.0.7.tgz?cache=0&sync_timestamp=1622604485818&other_urls=https%3A%2F%2Fregistry.nlark.com%2Feventemitter3%2Fdownload%2Feventemitter3-4.0.7.tgz"
   "version" "4.0.7"
@@ -4125,6 +4160,15 @@
     "inherits" "^2.0.1"
     "readable-stream" "^2.0.0"
 
+"fs-extra@^5.0.0":
+  "integrity" "sha512-66Pm4RYbjzdyeuqudYqhFiNBbCIuI9kgRqLPSHIlXHidW8NIQtVdkM1yeZ4lXwuhbTETv3EUGMNHAAw6hiundQ=="
+  "resolved" "https://registry.npmmirror.com/fs-extra/-/fs-extra-5.0.0.tgz"
+  "version" "5.0.0"
+  dependencies:
+    "graceful-fs" "^4.1.2"
+    "jsonfile" "^4.0.0"
+    "universalify" "^0.1.0"
+
 "fs-extra@^7.0.1":
   "integrity" "sha1-TxicRKoSO4lfcigE9V6iPq3DSOk="
   "resolved" "https://registry.nlark.com/fs-extra/download/fs-extra-7.0.1.tgz"
@@ -4154,6 +4198,14 @@
   "resolved" "https://registry.npm.taobao.org/function-bind/download/function-bind-1.1.1.tgz"
   "version" "1.1.1"
 
+"generate-source-map@0.0.5":
+  "integrity" "sha512-jqiE7f3FEaeMcjnMSEYLjMa39bdx+RrrdfhxdJpMm9S/8IugHF4vLQLZ9sxHylWyxpsBILukC/l/7B0/O0zhNg=="
+  "resolved" "https://registry.npmmirror.com/generate-source-map/-/generate-source-map-0.0.5.tgz"
+  "version" "0.0.5"
+  dependencies:
+    "esprima" "~1.2.2"
+    "source-map" "~0.1.34"
+
 "gensync@^1.0.0-beta.2":
   "integrity" "sha1-MqbudsPX9S1GsrGuXZP+qFgKJeA="
   "resolved" "https://registry.nlark.com/gensync/download/gensync-1.0.0-beta.2.tgz"
@@ -4172,6 +4224,11 @@
     "function-bind" "^1.1.1"
     "has" "^1.0.3"
     "has-symbols" "^1.0.1"
+
+"get-size@^2.0.2":
+  "integrity" "sha512-lXNzT/h/dTjTxRbm9BXb+SGxxzkm97h/PCIKtlN/CBCxxmkkIVV21udumMS93MuVTDX583gqc94v3RjuHmI+2Q=="
+  "resolved" "https://registry.npmmirror.com/get-size/-/get-size-2.0.3.tgz"
+  "version" "2.0.3"
 
 "get-stream@^4.0.0":
   "integrity" "sha1-wbJVV189wh1Zv8ec09K0axw6VLU="
@@ -7540,6 +7597,13 @@
   "resolved" "https://registry.npm.taobao.org/source-map/download/source-map-0.7.3.tgz"
   "version" "0.7.3"
 
+"source-map@~0.1.34":
+  "integrity" "sha512-VtCvB9SIQhk3aF6h+N85EaqIaBFIAfZ9Cu+NJHHVvc8BbEcnvDcFw6sqQ2dQrT6SlOrZq3tIvyD9+EGq/lJryQ=="
+  "resolved" "https://registry.npmmirror.com/source-map/-/source-map-0.1.43.tgz"
+  "version" "0.1.43"
+  dependencies:
+    "amdefine" ">=0.0.4"
+
 "sourcemap-codec@^1.4.4":
   "integrity" "sha1-6oBL2UhXQC5pktBaOO8a41qatMQ="
   "resolved" "https://registry.nlark.com/sourcemap-codec/download/sourcemap-codec-1.4.8.tgz"
@@ -8071,6 +8135,13 @@
   "resolved" "https://registry.nlark.com/unicode-property-aliases-ecmascript/download/unicode-property-aliases-ecmascript-2.0.0.tgz?cache=0&sync_timestamp=1631609367398&other_urls=https%3A%2F%2Fregistry.nlark.com%2Funicode-property-aliases-ecmascript%2Fdownload%2Funicode-property-aliases-ecmascript-2.0.0.tgz"
   "version" "2.0.0"
 
+"unidragger@^2.4.0":
+  "integrity" "sha512-MueZK2oXuGE6OAlGKIrSXK2zCq+8yb1QUZgqyTDCSJzvwYL0g2Llrad+TtoQTYxtFnNyxxSw0IMnKNIgEMia1w=="
+  "resolved" "https://registry.npmmirror.com/unidragger/-/unidragger-2.4.0.tgz"
+  "version" "2.4.0"
+  dependencies:
+    "unipointer" "^2.4.0"
+
 "union-value@^1.0.0":
   "integrity" "sha1-C2/nuDWuzaYcbqTU8CwUIh4QmEc="
   "resolved" "https://registry.nlark.com/union-value/download/union-value-1.0.1.tgz"
@@ -8080,6 +8151,13 @@
     "get-value" "^2.0.6"
     "is-extendable" "^0.1.1"
     "set-value" "^2.0.1"
+
+"unipointer@^2.4.0":
+  "integrity" "sha512-VjzDLPjGK7aYpQKH7bnDZS8X4axF5AFU/LQi+NQe1oyEHfaz6lWKhaQ7n4o7vJ1iJ4i2T0quCIfrQM139p05Sw=="
+  "resolved" "https://registry.npmmirror.com/unipointer/-/unipointer-2.4.0.tgz"
+  "version" "2.4.0"
+  dependencies:
+    "ev-emitter" "^1.0.1"
 
 "uniq@^1.0.1":
   "integrity" "sha1-sxxa6CVIRKOoKBVBzisEuGWnNP8="
@@ -8592,6 +8670,28 @@
   "version" "6.2.2"
   dependencies:
     "async-limiter" "~1.0.0"
+
+"xgplayer-subtitles@^1.0.19":
+  "integrity" "sha512-+m1fo+FFynL+2ymO4UQBUSnJAz3WuIthpJFCrKBjd+ukcLRoy3vTcsylXEOo5AZN1xT28fpHmxvZQKEIEYA+6w=="
+  "resolved" "https://registry.npmmirror.com/xgplayer-subtitles/-/xgplayer-subtitles-1.0.22.tgz"
+  "version" "1.0.22"
+  dependencies:
+    "eventemitter3" "^4.0.7"
+    "generate-source-map" "0.0.5"
+
+"xgplayer@^2.31.6":
+  "integrity" "sha512-95mEdChOam010QCKU+putYvjbN/MPwQZwECrlG+MbTy8e7REpVEgTmko6f5FRQoPAMV7k7veLgZrCaMUDuV81A=="
+  "resolved" "https://registry.npmmirror.com/xgplayer/-/xgplayer-2.31.6.tgz"
+  "version" "2.31.6"
+  dependencies:
+    "chalk" "^2.3.2"
+    "commander" "^2.15.1"
+    "danmu.js" "^0.5.9"
+    "downloadjs" "1.4.7"
+    "draggabilly" "^2.2.0"
+    "event-emitter" "^0.3.5"
+    "fs-extra" "^5.0.0"
+    "xgplayer-subtitles" "^1.0.19"
 
 "xtend@^4.0.0", "xtend@~4.0.1":
   "integrity" "sha1-u3J3n1+kZRhrH0OPZ0+jR/2121Q="
