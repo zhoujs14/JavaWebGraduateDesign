@@ -1,7 +1,7 @@
 <template>
   <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
     <li v-for="i in records" :key="i" class="infinite-list-item" :infinite-scroll-disabled="isOver">
-      <Card :data="i"/>
+      <Card :data="i" :type="this.type"/>
     </li>
   </ul>
 </template>

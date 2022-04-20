@@ -26,6 +26,9 @@
 
 <script>
 import Player from 'xgplayer'
+import request from "../../utils/request";
+
+let player
 
 export default {
   name: "Video",
@@ -41,13 +44,31 @@ export default {
       }
     }
   },
-  mounted() {
-    let player = new Player({
-      id: 'mse',
-      url: "http://localhost:9090/files/video/7ad8aac8964b43a0895abee8595813d2",
-      fluid: true, //流式布局
-      poster: 'http://localhost:9090/files/6dd5e44383a645308b67dcafd692db93' //封面
-    });
+  methods:{
+    queryAuthor(){
+      request.get('/user/'+this.currentVideo.authorId).then(res=>{
+        if(res?.code==='0'){
+          this.author=res.data
+        }
+      })
+    }
+  },
+  created() {
+    let vid=window.location.search.replace("?vid=","")
+    if(vid){
+      request.get("/video/"+vid).then(res=>{
+        if(res?.code==='0'){
+          this.currentVideo=res.data
+          this.queryAuthor(this.currentVideo.authorId);
+          player = new Player({
+            id: 'mse',
+            url: this.currentVideo.src,
+            fluid: true, //流式布局
+            poster: 'http://localhost:9090/files/6dd5e44383a645308b67dcafd692db93' //封面
+          });
+        }
+      })
+    }
   }
 }
 </script>

@@ -50,7 +50,6 @@ export default {
   },
   created() {
     let bid=window.location.search.replace("?bid=","")
-    console.log(bid)
     if(bid){
       request.get("/blog/"+bid).then(res=>{
         if(res?.code==='0'){

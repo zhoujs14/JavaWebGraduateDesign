@@ -29,11 +29,13 @@
 <script>
 export default {
   name: "Card",
-  props:["data"],
+  props:["data","type"],
   methods:{
     goToDetail(){
       if(!!this.data){
-        this.$router.push("/blog?bid="+this.data.id)
+        console.log("type",this.type)
+        let url=this.type==='blog'?"/blog?bid=":"/video?vid="
+        this.$router.push(url+this.data.id)
       }
     }
   }
