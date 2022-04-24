@@ -14,16 +14,16 @@ import java.util.Date;
 public class Comment {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
-    private Integer type;
+    private String type;
     private Integer authorId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date time;
-    private String comment;
-    private Integer like;
+    private String content;
+    private Integer parentId;
 
     @TableField(exist = false)
     private String authorName;
 
     @TableField(exist = false)
-    private String typeName;
+    private String avatarSrc;
 }

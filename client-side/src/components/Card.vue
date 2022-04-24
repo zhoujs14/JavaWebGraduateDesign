@@ -1,7 +1,11 @@
 <template>
   <div class="card" @click='goToDetail'>
     <!-- 标题   -->
-    <div style="margin-bottom: 5px">{{data.title}}</div>
+    <div style="margin-bottom: 5px">
+      <el-tag type="success" v-if="data.cateName" style="margin-right: 8px">{{data.cateName}}</el-tag>
+      <el-tag type="warning" v-if="data.locationName" style="margin-right: 8px">{{data.locationName}}</el-tag>
+      {{data.title}}
+    </div>
     <div style="display: flex">
       <!-- 封面   -->
       <div class="cover"><el-image :src="data.cover" class="cover" fit="cover"/></div>

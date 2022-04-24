@@ -31,4 +31,7 @@ public class Blog {
 
     @TableField(exist = false)
     private String cateName;
+
+    @TableField(exist = false)
+    private String locationName;
 }

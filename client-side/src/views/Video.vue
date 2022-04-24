@@ -15,7 +15,7 @@
         <div id="mse"></div>
       </el-card>
       <el-card style="margin-top: 20px">
-        评论
+        <Comment type="video" :id="currentVideo.id" v-if="currentVideo.id"/>
       </el-card>
     </el-col>
     <el-col :span="4">
@@ -25,13 +25,18 @@
 </template>
 
 <script>
+import Comment from "../components/Comment";
 import Player from 'xgplayer'
 import request from "../../utils/request";
 
 let player
+let vid
 
 export default {
   name: "Video",
+  components:{
+    Comment
+  },
   data(){
     return {
       author:{
@@ -64,7 +69,7 @@ export default {
             id: 'mse',
             url: this.currentVideo.src,
             fluid: true, //流式布局
-            poster: 'http://localhost:9090/files/6dd5e44383a645308b67dcafd692db93' //封面
+            poster: this.currentVideo.cover //封面
           });
         }
       })

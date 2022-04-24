@@ -10,13 +10,19 @@
     <!--  正文容器    -->
       <el-col :span="16">
         <el-card>
+    <!--  标题        -->
           <h1 >{{currentBlog.title}}</h1>
-          <div class="time">{{currentBlog.time}}</div>
+          <el-row class="subTitle">
+            <div class="time">{{currentBlog.time}}</div>
+            <el-tag type="success" v-if="currentBlog.cateName" style="margin-right: 8px">{{currentBlog.cateName}}</el-tag>
+            <el-tag type="warning" v-if="currentBlog.locationName" style="margin-right: 8px">{{currentBlog.locationName}}</el-tag>
+          </el-row>
           <el-divider/>
+    <!--   正文       -->
           <div v-html="currentBlog.content"></div>
         </el-card>
-        <el-card style="margin-top: 20px">
-          评论
+        <el-card style="margin-top: 20px" body-style="padding:20px 3px">
+          <Comment type="blog" :id="currentBlog.id" v-if="currentBlog.id"/>
         </el-card>
       </el-col>
       <el-col :span="4">
@@ -27,9 +33,11 @@
 
 <script>
 import request from "../../utils/request";
+import Comment from "../components/Comment";
 
 export default {
   name: "Blog",
+  components: {Comment},
   data(){
     return {
       currentBlog: {
@@ -64,8 +72,13 @@ export default {
 
 <style scoped>
 .time {
-  margin-top: 6px;
   font-size: 14px;
-  color: dimgray
+  color: dimgray;
+  margin-right: 8px;
+}
+
+.subTitle {
+  align-items: center;
+  margin-top: 6px
 }
 </style>

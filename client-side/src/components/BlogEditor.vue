@@ -86,13 +86,13 @@ export default {
       request.post("/blog",this.blog).then(res => {
         if(res?.code==='0'){
           this.$message({type:'success',message:'投稿成功'})
-          // sessionStorage.setItem("blog",null)
-          // this.blog={
-          //   cover:null,
-          //   brief:"",
-          //   title:"",
-          // }
-          // this.initializeEditor()
+          sessionStorage.setItem("blog",null)
+          this.blog={
+            cover:null,
+            brief:"",
+            title:"",
+          }
+          this.initializeEditor()
         }
         else {
           this.$message({type:'error',message:'投稿失败,错误信息：'+res?.msg})

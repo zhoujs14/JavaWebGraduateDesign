@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.item.arrangement.mapper.CommentMapper">
+    <resultMap id="commentMap" type="com.item.arrangement.entity.Comment">
+        <result property="id" column="id"/>
+        <result property="authorId" column="author_id"/>
+        <result property="content" column="content"/>
+        <result property="authorId" column="author_id"/>
+        <result property="time" column="time"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="type" column="type"/>
+        <result property="authorName" column="nick_name"/>
+        <result property="avatarSrc" column="avatar_src"/>
+    </resultMap>
+
+    <select id="findBlogPage" resultMap="commentMap">
+        SELECT `comment`.* ,user.nick_name,user.avatar_src from `comment`
+        left join user on user.id = comment.author_id
+        where `comment`.type='blog' and `comment`.parent_id = #{blogId}
+    </select>
+    <select id="findVideoPage" resultMap="commentMap">
+        SELECT `comment`.* ,user.nick_name,user.avatar_src from `comment`
+        left join user on user.id = comment.author_id
+        where `comment`.type='video' and `comment`.parent_id = #{videoId}
+    </select>
+</mapper>

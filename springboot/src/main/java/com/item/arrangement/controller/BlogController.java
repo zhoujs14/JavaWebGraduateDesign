@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.item.arrangement.common.Result;
 import com.item.arrangement.entity.Blog;
 import com.item.arrangement.mapper.BlogMapper;
+import com.item.arrangement.mapper.CategoryMapper;
+import com.item.arrangement.mapper.LocationMapper;
 import com.item.arrangement.mapper.UserMapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +26,10 @@ public class BlogController extends BaseController{
     BlogMapper blogMapper;
 
     @Resource
-    UserMapper userMapper;
+    LocationMapper locationMapper;
+
+    @Resource
+    CategoryMapper categoryMapper;
 
     //新增博客
     @PostMapping
@@ -56,6 +61,8 @@ public class BlogController extends BaseController{
     public Result<?> getById(@PathVariable Integer id){
         Blog b=blogMapper.selectById(id);
         if(b!=null) {
+            if(b.getCateId()!=null) b.setCateName(categoryMapper.selectById(b.getCateId()).getName());
+            if(b.getLocationId()!=null) b.setLocationName(locationMapper.selectById(b.getLocationId()).getName());
             return Result.success(b);
         }
         return Result.error("404","文章不见了");
