@@ -58,8 +58,12 @@ public class VideoController extends BaseController{
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum, //页码
                               @RequestParam(defaultValue = "10") Integer pageSize, //项目条数
-                              @RequestParam(defaultValue = "") String keyWords){ //搜索关建字
-        Page<Video> videoPage= videoMapper.findPage(new Page<>(pageNum,pageSize));
+                              @RequestParam(defaultValue = "") String keyWords, //搜索关建字
+                              @RequestParam(defaultValue = "title") String searchPattern, //根据..搜索
+                              @RequestParam(defaultValue = "0") Integer categoryId,
+                              @RequestParam(defaultValue = "0") Integer locationId){
+        Page<Video> videoPage= videoMapper.findPage(new Page<>(pageNum,pageSize),searchPattern,keyWords,categoryId,locationId);
+
         return Result.success(videoPage);
     }
 

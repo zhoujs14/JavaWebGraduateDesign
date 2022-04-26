@@ -1,9 +1,10 @@
 <template>
-  <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
-    <li v-for="i in records" :key="i" class="infinite-list-item" :infinite-scroll-disabled="isOver">
+  <ul v-infinite-scroll="load" style="overflow: auto" v-if="records.length>0">
+    <li v-for="i in records" :key="i" :infinite-scroll-disabled="isOver" >
       <Card :data="i" :type="this.type"/>
     </li>
   </ul>
+  <div v-else style="color: gray;text-align: center">暂无数据</div>
 </template>
 
 <script>
@@ -15,7 +16,7 @@ export default {
   components:{
     Card
   },
-  props:["type"],
+  props:["type","searchPattern","keyWords","categoryId","locationId"],
   data(){
     return {
       currentPage:1,
@@ -23,7 +24,33 @@ export default {
       records:[],
       isOver:false,
       inquiring:false,
-      queryUrl:""
+    }
+  },
+  //监听搜素参数变化,重新请求数据
+  watch:{
+    searchPattern:{
+      handler(){
+        this.initialize()
+        this.load()
+      }
+    },
+    keyWords:{
+      handler(){
+        this.initialize()
+        this.load()
+      }
+    },
+    categoryId:{
+      handler(){
+        this.initialize()
+        this.load()
+      }
+    },
+    locationId:{
+      handler(){
+        this.initialize()
+        this.load()
+      }
     }
   },
   methods:{
@@ -48,6 +75,10 @@ export default {
             params:{
               pageNum:this.currentPage,
               pageSize:this.pageSize,
+              searchPattern:this.searchPattern,
+              keyWords:this.keyWords,
+              categoryId:this.categoryId,
+              locationId:this.locationId
             }
           }).then(res=>{
             if(res?.code==='0'){
@@ -63,14 +94,18 @@ export default {
           )
         }
       }
-
-    }
+    },
+    initialize(){
+      this.currentPage=1
+      this.pageSize=10
+      this.records=[]
+      this.isOver=false
+    },
   },
-  mounted() {
-    this.currentPage=1
-    this.pageSize=10
+  created() {
+    this.initialize()
     this.load()
-  }
+  },
 }
 </script>
 

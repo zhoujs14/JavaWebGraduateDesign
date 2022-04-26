@@ -3,6 +3,7 @@
       v-model="input"
       :placeholder="placeholder"
       clearable
+      @keyup.enter.native="search"
   >
     <template #prepend>
       <el-select v-model="currentSelect" style="width: 110px" @change="handleSelectChange">
@@ -11,7 +12,7 @@
       </el-select>
     </template>
     <template #append>
-      <el-icon style="cursor: pointer"><Search/></el-icon>
+      <el-icon style="cursor: pointer" @click="search"><Search/></el-icon>
     </template>
   </el-input>
 </template>
@@ -32,6 +33,13 @@ export default {
   methods:{
     handleSelectChange(val){
       this.placeholder=pattern[val-1]
+    },
+    search(){
+      //将数据发给父组件进行处理
+      this.$emit('handleSearch',{
+        searchPattern: this.currentSelect===1?"title":"author",
+        keyWords: this.input
+      })
     }
   }
 }

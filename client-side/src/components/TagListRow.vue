@@ -1,7 +1,8 @@
 <template>
   <div v-if="data" style="display: flex;align-items: center;margin-bottom: 12px">
     <span style="color: gray;font-size: 13px">{{this.prefix}}</span>
-    <el-tag v-for="item in data" type="info" size="large" class="tag">{{item.name}}</el-tag>
+    <el-tag :type="this.currentSelect===0?'':'info'" size="large" class="tag" @click="()=>handleSelect({id:0,name:'全部'})">全部</el-tag>
+    <el-tag v-for="item in data" :type="this.currentSelect===item.id?'':'info'" size="large" class="tag" @click="()=>handleSelect(item)">{{item.name}}</el-tag>
   </div>
 </template>
 
@@ -13,7 +14,8 @@ export default {
   props:['type','prefix'],
   data(){
     return {
-      data:null
+      data:null,
+      currentSelect:0
     }
   },
   methods:{
@@ -27,6 +29,11 @@ export default {
           this.$message({type:'error',message:`获取${this.type==='category'?'物品种类':'收纳位置'}标签失败`})
         }
       })
+    },
+    handleSelect(item){
+      this.currentSelect=item.id
+      item.type=this.type
+      this.$emit('tagSelect',{tag:item})
     }
   },
   created() {

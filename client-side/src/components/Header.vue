@@ -32,7 +32,7 @@
           <el-icon :size="20" color="gray"><clock /></el-icon>
           <span class="grayText">历史</span>
         </div>
-        <el-button id="contributeBtn" type="primary" size="middle" @click="()=>this.$router.push('/upload')">
+        <el-button id="contributeBtn" type="primary" @click="()=>this.$router.push('/upload')">
           <el-icon :size="17" style="margin-right: 6px"><upload-filled /></el-icon>
           投稿
         </el-button>

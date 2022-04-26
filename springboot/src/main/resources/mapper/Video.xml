@@ -24,5 +24,8 @@
         left join user on user.id = video.author_id
         left join category on category.id =video.cate_id
         left join location on location.id =video.location_id
+        where if(#{type}='title',video.title like concat(concat('%',#{keyWords},'%')),user.nick_name like concat(concat('%',#{keyWords},'%'))) and
+        if(#{cid}=0,0=0,video.cate_id=#{cid}) and
+        if(#{lid}=0,0=0,video.location_id=#{lid})
     </select>
 </mapper>
