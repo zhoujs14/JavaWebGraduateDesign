@@ -1,7 +1,7 @@
 <template>
   <ul v-infinite-scroll="load" style="overflow: auto" v-if="records.length>0">
     <li v-for="i in records" :key="i" :infinite-scroll-disabled="isOver" >
-      <Card :data="i" :type="this.type"/>
+      <Card :data="i" :type="this.type" :edit="this.editable"/>
     </li>
   </ul>
   <div v-else style="color: gray;text-align: center">暂无数据</div>
@@ -16,7 +16,7 @@ export default {
   components:{
     Card
   },
-  props:["type","searchPattern","keyWords","categoryId","locationId"],
+  props:["type","searchPattern","keyWords","categoryId","locationId","editable"],
   data(){
     return {
       currentPage:1,

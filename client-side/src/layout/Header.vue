@@ -8,13 +8,13 @@
       <div class="contentRight">
         <div>
           <el-dropdown size="large">
-            <el-avatar :size="40" :src="user.avatarSrc" v-if="isLogin" style="cursor: pointer"/>
+            <el-avatar :size="40" :src="user.avatarSrc" v-if="isLogin" style="cursor: pointer" fit="fill"/>
             <el-avatar :size="40" v-if="!isLogin">登录</el-avatar>
             <template #dropdown>
               <el-dropdown-menu v-if="isLogin">
                 <el-dropdown-item class="item" disabled><div class="item">{{user?.nickName||""}}</div></el-dropdown-item>
                 <el-dropdown-item class="item" @click="goToProfile"><div class="item">个人中心</div></el-dropdown-item>
-                <el-dropdown-item class="item" ><div class="item">投稿管理</div></el-dropdown-item>
+                <el-dropdown-item class="item" @click="goToContribution" ><div class="item">投稿管理</div></el-dropdown-item>
                 <el-dropdown-item class="item" @click="exit" divided><div class="item">退出登录</div></el-dropdown-item>
               </el-dropdown-menu>
               <el-dropdown-menu v-if="!isLogin">
@@ -74,6 +74,11 @@ export default {
     goToProfile(){
       if(this.isLogin){
         this.$router.push('/profile')
+      }
+    },
+    goToContribution(){
+      if(this.isLogin){
+        this.$router.push('/uploadManager')
       }
     }
   },

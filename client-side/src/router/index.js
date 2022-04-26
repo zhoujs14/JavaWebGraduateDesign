@@ -32,6 +32,11 @@ const routes = [
         name:'video',
         component:()=>import("../views/Video")
       },
+      {
+        path: '/uploadManager',
+        name:'uploadManager',
+        component:()=>import("../views/UploadManager")
+      }
     ]
   },
   {

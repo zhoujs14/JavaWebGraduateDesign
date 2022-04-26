@@ -4,8 +4,8 @@
     <SearchBar style="margin-bottom: 14px" @handleSearch="handleSearch"/>
     <!-- 分类标签   -->
     <div style="margin-bottom: 16px">
-      <TagListRow type="category" prefix="按收纳物品分类:" @tagSelect="handleTagSelect"/>
       <TagListRow type="location" prefix="按收纳位置分类:" @tagSelect="handleTagSelect"/>
+      <TagListRow type="category" prefix="按收纳物品分类:" @tagSelect="handleTagSelect"/>
     </div>
     <!-- 教程列表标签页   -->
     <el-tabs type="border-card" style="flex:1" v-model="activeName">

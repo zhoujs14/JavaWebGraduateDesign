@@ -51,6 +51,12 @@
           </template>
         </el-upload>
       </el-form-item>
+      <el-form-item label="收纳物品分类">
+        <CateSelect @categorySelect="selectCate"/>
+      </el-form-item>
+      <el-form-item label="收纳位置分类">
+        <LocationSelect @locationSelect="selectLocation"/>
+      </el-form-item>
       <el-divider/>
     </el-form>
     <div style="display: flex;justify-content: flex-end">
@@ -62,15 +68,21 @@
 
 <script>
 import request from "../../utils/request";
+import CateSelect from "./CateSelecte";
+import LocationSelect from "./LocationSelect";
 
 export default {
   name: "VideoUploader",
+  components: {CateSelect,LocationSelect},
+  props:['editVideo'],
   data(){
     return {
       video:{
         cover:null,
         brief:"",
         title:"",
+        cateId: "",
+        locationId:""
       }
     }
   },
@@ -113,29 +125,49 @@ export default {
       return true
     },
     save(){
-      request.post("/video",this.video).then(res => {
-        if(res?.code==='0'){
-          this.$message({type:'success',message:'投稿成功'})
-          sessionStorage.setItem("video",null)
-          this.video={
-            cover:null,
-            brief:"",
-            title:"",
+      if(!!this.editVideo){
+        request.put("/video",this.video).then(res => {
+          if(res?.code==='0'){
+            this.$message({type:'success',message:'编辑成功'})
+            this.$emit('updated')
           }
-        }
-        else {
-          this.$message({type:'error',message:'投稿失败,错误信息：'+res?.msg})
-        }
-      })
+          else this.$message({type:'error',message:'投稿失败,错误信息：'+res?.msg})
+        })
+      }
+      else {
+        request.post("/video",this.video).then(res => {
+          if(res?.code==='0'){
+            this.$message({type:'success',message:'投稿成功'})
+            sessionStorage.setItem("video",null)
+            this.video={
+              cover:null,
+              brief:"",
+              title:"",
+            }
+          }
+          else this.$message({type:'error',message:'投稿失败,错误信息：'+res?.msg})
+        })
+      }
     },
     saveLocal(){
       sessionStorage.setItem("video",JSON.stringify(this.video))
       this.$message({type:'success',message:'保存成功'})
-    }
+    },
+    selectCate(val){
+      this.video.cateId=val
+    },
+    selectLocation(val){
+      this.video.locationId=val
+    },
   },
   created() {
-    let localVideo=JSON.parse(sessionStorage.getItem("video"))
-    if(!!localVideo) this.video=localVideo
+    if(!!this.editVideo){
+      this.video=this.editVideo
+    }
+    else {
+      let localVideo=JSON.parse(sessionStorage.getItem("video"))
+      if(!!localVideo) this.video=localVideo
+    }
   }
 }
 </script>

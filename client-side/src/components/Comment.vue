@@ -110,7 +110,11 @@ export default {
         } else {
           this.$message({type: 'error', message: '评论失败,' + res?.msg})
         }
-      })
+      }).finally(
+          ()=>{
+            this.load()
+          }
+      )
     }
   },
   created() {

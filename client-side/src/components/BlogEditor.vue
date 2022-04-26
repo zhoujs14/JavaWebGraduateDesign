@@ -31,6 +31,18 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="收纳物品分类">
+            <CateSelect @categorySelect="selectCate"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="收纳位置分类">
+            <LocationSelect @locationSelect="selectLocation"/>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-divider/>
       <div id="toolbar-container"></div>
       <div id="editor-container" style="height: 60vh"></div>
@@ -46,19 +58,27 @@
 import '@wangeditor/editor/dist/css/style.css'
 import { createEditor, createToolbar } from '@wangeditor/editor'
 import request from "../../utils/request";
+import CateSelect from "./CateSelecte";
+import LocationSelect from "./LocationSelect";
 
 let editorConfig= {}
 let editor,toolbar
 
 export default {
   name: "BlogEditor",
+  components: {LocationSelect, CateSelect},
+  props:['editBlog'],
   data(){
     return {
       blog:{
         cover:null,
         brief:"",
         title:"",
-      }
+        cateId:'',
+        locationId:''
+      },
+      categories:[],
+      locations:[]
     }
   },
   methods:{
@@ -82,22 +102,32 @@ export default {
     },
     save(){
       this.blog.content=editor.getHtml()  //获取编辑器内容到表单
-
-      request.post("/blog",this.blog).then(res => {
-        if(res?.code==='0'){
-          this.$message({type:'success',message:'投稿成功'})
-          sessionStorage.setItem("blog",null)
-          this.blog={
-            cover:null,
-            brief:"",
-            title:"",
+      if(!!this.editBlog) {
+        request.put("/blog",this.blog).then(res => {
+          if(res?.code==='0') {
+            this.$message({type: 'success', message: '编辑成功'})
+            this.$emit('updated')
           }
-          this.initializeEditor()
-        }
-        else {
-          this.$message({type:'error',message:'投稿失败,错误信息：'+res?.msg})
-        }
-      })
+          else this.$message({type:'error',message:'编辑失败,错误信息：'+res?.msg})
+        })
+      }
+      else {
+        request.post("/blog",this.blog).then(res => {
+          if(res?.code==='0'){
+            this.$message({type:'success',message:'投稿成功'})
+            sessionStorage.setItem("blog",null)
+            this.blog={
+              cover:null,
+              brief:"",
+              title:"",
+            }
+            this.initializeEditor()
+          }
+          else {
+            this.$message({type:'error',message:'投稿失败,错误信息：'+res?.msg})
+          }
+        })
+      }
     },
     saveLocal(){
       this.blog.content=editor.getHtml()
@@ -133,12 +163,25 @@ export default {
           mode: 'default' // 或 'simple' 参考下文
         })
       })
-    }
+    },
+    selectCate(val){
+      this.blog.cateId=val
+    },
+    selectLocation(val){
+      this.blog.locationId=val
+    },
   },
   created() {
-    let localBlog=JSON.parse(sessionStorage.getItem("blog"))
-    if(!!localBlog) this.blog=localBlog
-    this.initializeEditor()
+    //若传来初始内容
+    if(!!this.editBlog&&!!this.editBlog?.content){
+      this.initializeEditor(this.editBlog.content)
+      this.blog=this.editBlog
+    }
+    else {
+      let localBlog=JSON.parse(sessionStorage.getItem("blog"))
+      if(!!localBlog) this.blog=localBlog
+      this.initializeEditor()
+    }
   }
 }
 </script>

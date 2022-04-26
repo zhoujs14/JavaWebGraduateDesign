@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Header from "../components/Header";
+import Header from "./Header";
 export default {
   name: "Layout",
   components: {Header}
