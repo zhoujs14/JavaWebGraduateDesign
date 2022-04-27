@@ -54,6 +54,12 @@ export default {
           this.author=res.data
         }
       })
+    },
+    saveHistory(){
+      request.post('/watch',{
+        type:'blog',
+        contentId:this.currentBlog.id
+      })
     }
   },
   created() {
@@ -63,6 +69,7 @@ export default {
         if(res?.code==='0'){
           this.currentBlog=res.data
           this.queryAuthor(this.currentBlog.authorId);
+          this.saveHistory();
         }
       })
     }

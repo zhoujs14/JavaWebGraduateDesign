@@ -101,7 +101,6 @@ export default {
       }
     },
     confirmDel(){
-      console.log('del',this.data)
       let url=this.type==='blog'?'/blog':'/video'
       request.delete(`${url}/${this.data.id}`).then(res=>{
         let options=res?.code==='0'?{type:"success",message:"删除成功"}:{type:"error",message:"删除失败,错误信息:"+res.msg}
@@ -109,8 +108,6 @@ export default {
         window.location.reload()
       })
     }
-  },
-  created() {
   }
 }
 </script>

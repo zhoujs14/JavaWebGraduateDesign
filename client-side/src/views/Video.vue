@@ -56,6 +56,12 @@ export default {
           this.author=res.data
         }
       })
+    },
+    saveHistory(){
+      request.post('/watch',{
+        type:'video',
+        contentId:this.currentVideo.id
+      })
     }
   },
   created() {
@@ -64,7 +70,8 @@ export default {
       request.get("/video/"+vid).then(res=>{
         if(res?.code==='0'){
           this.currentVideo=res.data
-          this.queryAuthor(this.currentVideo.authorId);
+          this.queryAuthor(this.currentVideo.authorId)
+          this.saveHistory()
           player = new Player({
             id: 'mse',
             url: this.currentVideo.src,

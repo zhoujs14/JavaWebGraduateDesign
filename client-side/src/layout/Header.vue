@@ -7,6 +7,7 @@
       </div>
       <div class="contentRight">
         <div>
+        <!-- 头像及头像下拉菜单  -->
           <el-dropdown size="large">
             <el-avatar :size="40" :src="user.avatarSrc" v-if="isLogin" style="cursor: pointer" fit="fill"/>
             <el-avatar :size="40" v-if="!isLogin">登录</el-avatar>
@@ -28,10 +29,7 @@
           <el-icon :size="20" color="gray"><star/></el-icon>
           <span class="grayText">收藏</span>
         </div>
-        <div class="click" @click="goToProfile">
-          <el-icon :size="20" color="gray"><clock /></el-icon>
-          <span class="grayText">历史</span>
-        </div>
+        <History/>
         <el-button id="contributeBtn" type="primary" @click="()=>this.$router.push('/upload')">
           <el-icon :size="17" style="margin-right: 6px"><upload-filled /></el-icon>
           投稿
@@ -43,10 +41,11 @@
 
 <script>
 import {ArrowDown} from '@element-plus/icons-vue'
+import History from "../components/History";
 
 export default {
   name: "Header",
-  components: {ArrowDown},
+  components: {History, ArrowDown},
   data(){
     return {
       nickName:"",
