@@ -7,7 +7,7 @@
           <el-input :prefix-icon="AvatarIcon" v-model="form.username" label="用户名" ></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input :prefix-icon="KeyIcon" v-model="form.password" label="密码" show-password/>
+          <el-input :prefix-icon="KeyIcon" v-model="form.password" label="密码" show-password @keyup.enter.native="submit"/>
         </el-form-item>
         <el-form-item>
           <el-button style="width: 100%" type="primary" @click="submit">登录</el-button>

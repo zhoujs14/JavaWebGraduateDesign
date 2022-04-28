@@ -25,6 +25,7 @@ public class Blog {
     private String brief;
     private String cover;
     private Integer locationId;
+    private Integer star;
 
     @TableField(exist = false)
     private String authorName;

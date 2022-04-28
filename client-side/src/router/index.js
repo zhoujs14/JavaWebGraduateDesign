@@ -36,6 +36,11 @@ const routes = [
         path: '/uploadManager',
         name:'uploadManager',
         component:()=>import("../views/UploadManager")
+      },
+      {
+        path: '/favlist',
+        name:'favlist',
+        component:()=>import("../views/Favlist")
       }
     ]
   },

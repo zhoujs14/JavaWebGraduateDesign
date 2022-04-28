@@ -12,7 +12,7 @@ public interface VideoMapper extends BaseMapper<Video> {
      * @param keyWords 对应type的关建字,若为空则查询所有
      * @param cid 收纳物品类别id
      * @param lid 收纳位置id
-     * @return blogPage
+     * @return videoPage
      */
     Page<Video> findPage(Page<Video> page,String type,String keyWords,Integer cid,Integer lid);
 }

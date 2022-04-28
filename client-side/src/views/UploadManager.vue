@@ -67,11 +67,9 @@ export default {
     },
     selectCategory(val){
       this.cid=val
-      console.log('cid',this.cid)
     },
     selectLocation(val){
       this.lid=val
-      console.log('lid',this.lid)
     }
   },
   created() {

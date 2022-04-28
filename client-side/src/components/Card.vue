@@ -23,7 +23,10 @@
         <img :src="require('@/assets/img/like.png')" class="likeIcon" style="margin: 0 4px"/>
         {{data.likesCount}}
       </div>
-      <div class="bottomItem"><el-icon color="darkgray" :size="20"><star /></el-icon> 20</div>
+      <div class="bottomItem">
+        <el-icon color="darkgray" :size="20" style="margin-right: 4px"><star /></el-icon>
+        {{data.star}}
+      </div>
       <div class="authorName">{{data.authorName}}</div>
       <div>{{data.time.slice(0,10)}}</div>
     </div>
@@ -52,7 +55,10 @@
                 <img :src="require('@/assets/img/like.png')" class="likeIcon2" style="margin: 0 4px"/>
                 {{data.likesCount}}
               </div>
-              <div class="bottomItem"><el-icon color="darkgray" :size="16"><star /></el-icon> 20</div>
+              <div class="bottomItem">
+                <el-icon color="darkgray" :size="16" style="margin-right: 4px"><star /></el-icon>
+                {{data.star}}
+              </div>
             </div>
           </div>
         </div>

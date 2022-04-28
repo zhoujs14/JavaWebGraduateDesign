@@ -10,7 +10,8 @@
         <result property="time" column="time"/>
         <result property="cateId" column="cate_id"/>
         <result property="locationId" column="location_id"/>
-        <result property="like" column="like"/>
+        <result property="likesCount" column="likes_count"/>
+        <result property="star" column="star"/>
         <result property="watched" column="watched"/>
         <result property="brief" column="brief"/>
         <result property="cover" column="cover"/>

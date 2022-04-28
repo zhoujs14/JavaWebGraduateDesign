@@ -67,6 +67,7 @@ export default {
           if(res?.code==='0') {
             sessionStorage.setItem("user", JSON.stringify(this.user))
             this.$message({type:"success",message:"头像更新成功"})
+            window.location.reload()
           }
           else{
             this.$message({type:"error",message:"头像更新失败:"})

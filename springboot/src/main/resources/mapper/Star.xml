@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.item.arrangement.mapper.StarMapper">
+    <resultMap id="starMap" type="com.item.arrangement.entity.Star">
+        <result property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="type" column="type"/>
+        <result property="contentId" column="content_id"/>
+        <result property="time" column="time"/>
+        <result property="title" column="title"/>
+        <result property="cover" column="cover"/>
+        <result property="authorName" column="nick_name"/>
+    </resultMap>
+
+    <select id="findBlogPage" resultMap="starMap">
+        SELECT `star`.* ,blog.title,blog.cover,user.nick_name from `star`
+        left join blog on blog.id = star.content_id
+        left join user on blog.author_id=user.id
+        where star.type='blog' and star.uid=#{uid} and
+        if(#{type}='title',blog.title like concat(concat('%',#{keyWords},'%')),user.nick_name like concat(concat('%',#{keyWords},'%'))) and
+        if(#{cid}=0,0=0,blog.cate_id=#{cid}) and
+        if(#{lid}=0,0=0,blog.location_id=#{lid})
+    </select>
+
+    <select id="findVideoPage" resultMap="starMap">
+        SELECT `star`.* ,video.title,video.cover,user.nick_name from `star`
+        left join video on video.id = star.content_id
+        left join user on video.author_id=user.id
+        where star.type='video' and star.uid=#{uid} and
+            if(#{type}='title',video.title like concat(concat('%',#{keyWords},'%')),user.nick_name like concat(concat('%',#{keyWords},'%'))) and
+            if(#{cid}=0,0=0,video.cate_id=#{cid}) and
+            if(#{lid}=0,0=0,video.location_id=#{lid})
+    </select>
+</mapper>
