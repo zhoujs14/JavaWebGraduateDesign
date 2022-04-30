@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.item.arrangement.mapper.PostMapper">
+    <resultMap id="postMap" type="com.item.arrangement.entity.Post">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="authorId" column="author_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="time" column="time"/>
+        <result property="authorName" column="nick_name"/>
+        <result property="authorAvatar" column="avatar_src"/>
+    </resultMap>
+
+    <select id="findPage" resultMap="postMap">
+        SELECT `post`.* ,user.nick_name,user.avatar_src from `post`
+        left join user on user.id = post.author_id
+        where post.parent_id is null and
+        if(#{type}='title',post.title like concat(concat('%',#{keyWords},'%')),user.nick_name like concat(concat('%',#{keyWords},'%')))
+    </select>
+</mapper>

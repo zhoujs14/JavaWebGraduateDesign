@@ -19,7 +19,7 @@
           </el-row>
           <el-divider/>
           <!--   正文       -->
-          <div v-html="currentBlog.content"></div>
+          <div v-html="currentBlog.content" class="content"></div>
         </el-card>
         <!-- 点赞 收藏  -->
         <el-card style="margin-top: 20px" body-style="padding: 8px 16px">
@@ -38,7 +38,7 @@
         </el-card>
         <!--  评论   -->
         <el-card style="margin-top: 20px" body-style="padding:20px 3px">
-          <Comment type="blog" :id="currentBlog.id" v-if="currentBlog.id"/>
+          <CommentList type="blog" :id="currentBlog.id" v-if="currentBlog.id"/>
         </el-card>
       </el-col>
       <el-col :span="4">
@@ -48,11 +48,11 @@
 
 <script>
 import request from "../../utils/request";
-import Comment from "../components/Comment";
+import CommentList from "../components/CommentList";
 
 export default {
   name: "Blog",
-  components: {Comment},
+  components: {CommentList},
   data(){
     return {
       currentBlog: {
@@ -154,9 +154,6 @@ export default {
         }
       })
     },
-    log(){
-      console.log(this.isLike)
-    }
   },
   created() {
     let bid=window.location.search.replace("?bid=","")

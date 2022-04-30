@@ -1,126 +1,120 @@
 <template>
-  <div>
-    <el-row>
+<!--  根级评论-->
+  <div v-if="this.layer===0">
+    <el-row style="margin-top: 8px;min-height: 80px">
+       <!--  头像    -->
       <el-col :span="2" class="center">
-        <el-avatar :src="this.avatarSrc"/>
+        <el-avatar :src="comment.avatarSrc" :size="40"/>
       </el-col>
-      <el-col :span="20">
-        <el-input type="textarea"
-                  placeholder="发布一条友善的评论"
-                  v-model="this.comment.content"
-                  :autosize="{ minRows: 2, maxRows: 6 }">
-        </el-input>
+      <!-- 评论内容   -->
+      <el-col :span="20" class="comment">
+        <div style="font-size: 14px;color: palevioletred">{{comment.authorName}}</div>
+        <div style="font-size: 16px">{{comment.content}}</div>
+        <div class="row">
+          <div style="font-size: 10px;color: gray">{{comment.time}}</div>
+          <div class="re" @click="showInput(comment)">回复</div>
+        </div>
       </el-col>
       <el-col :span="2" class="center">
-        <el-button @click="save" type="primary" size="large">评论</el-button>
       </el-col>
     </el-row>
-    <div>
-      <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
-        <li v-for="c in records" :key="c" class="infinite-list-item" :infinite-scroll-disabled="isOver">
-          <el-divider/>
-          <el-row style="margin-top: 8px;min-height: 80px">
-            <el-col :span="2" class="center">
-              <el-avatar :src="c.avatarSrc"/>
-            </el-col>
-            <el-col :span="20" class="comment">
-              <div style="font-size: 14px;color: palevioletred">{{c.authorName}}</div>
-              <div style="font-size: 16px">{{c.content}}</div>
-              <div style="font-size: 10px;color: gray">{{c.time}}</div>
-            </el-col>
-            <el-col :span="2" class="center">
-            </el-col>
-          </el-row>
-        </li>
-      </ul>
+<!--    子评论-->
+    <el-row v-if="comment.children.length>0">
+      <el-col :span="2"></el-col>
+      <el-col :span="20">
+        <div v-for="subComment in comment.children">
+          <Comment :comment="subComment" :layer="1" :parent="comment" @showInput="showInput"/>
+        </div>
+      </el-col>
+    </el-row>
+<!--    回复输入框-->
+    <el-row v-if="inputVisible">
+      <el-col :span="2"/>
+      <el-col :span="22">
+        <CommentInput  style="margin-top: 12px" @onSubmit="submit" :placeholder="placeholder"/>
+      </el-col>
+    </el-row>
+  </div>
+
+<!--  子级评论-->
+  <div v-else>
+    <div class="row" style="margin-top: 4px">
+    <!-- 内容 -->
+      <el-avatar :src="comment.avatarSrc" :size="25" style="margin-right: 12px"/>
+      <div style="font-size: 13px;color: palevioletred;margin-right: 4px">{{comment.authorName}}</div>
+      <div style="font-size: 14px">
+        <span v-if="this.layer>1" style="color: dodgerblue">回复:@{{this.parent.authorName}}</span>
+        {{comment.content}}
+      </div>
     </div>
+    <div class="row" style="margin-top: 6px;margin-left: 37px">
+      <div style="font-size: 10px;color: gray">{{comment.time}}</div>
+      <div class="re" @click="showParentInput">回复</div>
+    </div>
+    <!-- 子评论 -->
+    <el-row v-if="comment.children.length>0">
+      <el-col :span="24">
+        <div v-for="subComment in comment.children">
+          <el-divider style="margin: 4px 0"/>
+          <Comment :comment="subComment" :layer="this.layer+1" :parent="comment" @showInput="showInput"/>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
+import CommentInput from "./CommentInput";
 import request from "../../utils/request";
-
-let editorConfig= {}
-let editor
-
 export default {
   name: "Comment",
-  props:['type','id'],
+  components: {CommentInput},
+  props:['comment','layer',"parent"],
   data(){
-    return {
-      currentPage:1,
-      pageSize: 10,
-      records:[],
-      isOver:false,
-      inquiring:false,
-      comment:{
-        type:this.type,
-        content:"",
-        parentId: this.id
-      },
-      avatarSrc:''
+    return{
+      inputVisible:false,
+      inputParent:{},
+      placeholder: null
     }
   },
-  methods: {
-    load(){
-      //若正在查询分页数据，1秒后再查询第二次
-      if(this.inquiring) {
-        setTimeout(()=>{
-          this.load(),1000
-        })
+  methods:{
+    showInput(parent){
+      //当前为底层comment
+      if(this.layer===0){
+        if(this.inputParent===parent){
+          this.inputVisible=!this.inputVisible
+        }
+        else {
+          this.placeholder=parent.parentId===null?null:"回复:@"+parent.authorName
+          this.inputVisible=true
+          this.inputParent=parent
+        }
       }
-      //当前未在查询分页数据
       else {
-        //数据已全部读取
-        if(this.isOver) {
-          return
-        }
-        //数据未读取完毕
-        else{
-          this.inquiring=true
-          request.get('/comment',{
-            params:{
-              pageNum:this.currentPage,
-              pageSize:this.pageSize,
-              type:this.type,
-              parentId:this.id
-            }
-          }).then(res=>{
-            if(res?.code==='0'){
-              this.records=this.records.concat(res.data.records)
-              console.log('records:',this.records)
-              if(res?.data?.total<=this.pageSize*this.currentPage) this.isOver=true //已加载全部内容
-              this.currentPage+=1
-            }
-            else{
-              this.$message({type:'error',message:'加载出错,错误信息:'+res?.msg})
-            }
-          }).finally(
-              ()=>this.inquiring=false
-          )
-        }
+        this.$emit('showInput',parent)
       }
-
     },
-    save() {
-      request.post("/comment", this.comment).then(res => {
-        if (res?.code === '0') {
-          this.$message({type: 'success', message: '评论成功'})
-          this.comment.content=''
-        } else {
-          this.$message({type: 'error', message: '评论失败,' + res?.msg})
+    //子集评论点击回复后发送给上一级评论
+    showParentInput(){
+      this.$emit('showInput',this.comment)
+    },
+    submit(content){
+      request.post('/comment',{
+        content:content,
+        parentId:this.inputParent.id,
+        rootId:this.inputParent.rootId,
+        type:this.inputParent.type
+      }).then(res=>{
+        if(res?.code==='0'){
+          this.$message({type:'success',message:'评论成功'})
+          window.location.reload()
+        }else {
+          this.$message({type:'error',message:'评论失败;'+res?.msg})
         }
-      }).finally(
-          ()=>{
-            this.load()
-          }
-      )
+      })
     }
   },
   created() {
-    let user= JSON.parse(sessionStorage.getItem('user'))
-    this.avatarSrc=user.avatarSrc
-    this.load()
   }
 }
 </script>
@@ -130,5 +124,14 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+.re {
+  font-size: 10px;
+  margin-left: 12px;
+  cursor: pointer;
+  color: gray;
+}
+.re:hover{
+  color: dodgerblue
 }
 </style>

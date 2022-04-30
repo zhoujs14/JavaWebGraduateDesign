@@ -41,7 +41,17 @@ const routes = [
         path: '/favlist',
         name:'favlist',
         component:()=>import("../views/Favlist")
-      }
+      },
+      {
+        path: '/post',
+        name:'post',
+        component:()=>import("../views/Post")
+      },
+      {
+        path: '/postDetail',
+        name:'postDetail',
+        component:()=>import("../views/PostDetail")
+      },
     ]
   },
   {

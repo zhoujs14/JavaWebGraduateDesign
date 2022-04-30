@@ -10,25 +10,24 @@ import lombok.Data;
 import java.util.Date;
 import java.util.List;
 
-@TableName ("comment")
+@TableName ("post")
 @Data
-public class Comment {
+public class Post {
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
-    private String type;
+    private String title;
+    private String content;
     private Integer authorId;
+    private Integer parentId;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date time;
-    private String content;
-    private Integer parentId;
-    private Integer rootId;
 
     @TableField(exist = false)
     private String authorName;
 
     @TableField(exist = false)
-    private String avatarSrc;
+    private String authorAvatar;
 
     @TableField(exist = false)
-    private List<Comment> children;
+    private List<Post> children;
 }

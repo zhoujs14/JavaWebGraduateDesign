@@ -35,7 +35,7 @@
         </div>
       </el-card>
       <el-card style="margin-top: 20px">
-        <Comment type="video" :id="currentVideo.id" v-if="currentVideo.id"/>
+        <CommentList type="video" :id="currentVideo.id" v-if="currentVideo.id"/>
       </el-card>
     </el-col>
     <el-col :span="4">
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import Comment from "../components/Comment";
+import CommentList from "../components/CommentList";
 import Player from 'xgplayer'
 import request from "../../utils/request";
 
@@ -55,7 +55,7 @@ let vid
 export default {
   name: "Video",
   components:{
-    Comment
+    CommentList
   },
   data(){
     return {

@@ -48,6 +48,8 @@ public class BlogController extends BaseController{
     //删除博客
     @DeleteMapping("/{id}") //占位符 /{aa}/{bb} ==> (@PathVariable aa的类型 aa,@PathVariable bb的类型 bb)
     public Result<?> delete(@PathVariable Integer id){
+        Blog res=blogMapper.selectById(id);
+        if(getAccount().getType().equals("user")&&res.getAuthorId()!=getAccount().getId()) return Result.error("401","无权限");
         blogMapper.deleteById(id);
         return Result.success();
     }

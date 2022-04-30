@@ -23,3 +23,14 @@
     flex-direction: row;
     align-items: center;
 }
+
+a {
+    text-decoration: none;
+}
+
+/*富文本*/
+.content {
+    WORD-WRAP:break-word;
+    TABLE-LAYOUT:fixed;
+    word-break:break-all;
+}

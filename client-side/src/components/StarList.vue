@@ -85,12 +85,12 @@ export default {
     },
     //分页大小改变
     handleSizeChange(newSize){
-      this.PageSize=newSize;
+      this.pageSize=newSize;
       this.load();
     },
     //页码切换
     handleCurrentChange(newCurrent){
-      this.CurrentPage=newCurrent;
+      this.currentPage=newCurrent;
       this.load();
     },
     initialize(){

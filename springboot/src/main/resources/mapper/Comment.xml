@@ -8,20 +8,21 @@
         <result property="content" column="content"/>
         <result property="authorId" column="author_id"/>
         <result property="time" column="time"/>
-        <result property="parentId" column="parent_id"/>
         <result property="type" column="type"/>
         <result property="authorName" column="nick_name"/>
         <result property="avatarSrc" column="avatar_src"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="rootId" column="root_id"/>
     </resultMap>
 
     <select id="findBlogPage" resultMap="commentMap">
         SELECT `comment`.* ,user.nick_name,user.avatar_src from `comment`
         left join user on user.id = comment.author_id
-        where `comment`.type='blog' and `comment`.parent_id = #{blogId}
+        where `comment`.type='blog' and `comment`.root_id = #{blogId}
     </select>
     <select id="findVideoPage" resultMap="commentMap">
         SELECT `comment`.* ,user.nick_name,user.avatar_src from `comment`
         left join user on user.id = comment.author_id
-        where `comment`.type='video' and `comment`.parent_id = #{videoId}
+        where `comment`.type='video' and `comment`.root_id = #{videoId}
     </select>
 </mapper>
