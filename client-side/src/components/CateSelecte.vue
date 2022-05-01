@@ -16,7 +16,7 @@ export default {
       categories:[]
     }
   },
-  props:['placeholder'],
+  props:['placeholder',"initialValue"],
   methods:{
     getCategories(){
       request.get('/category').then(res=>{
@@ -36,6 +36,7 @@ export default {
   },
   created() {
     this.getCategories()
+    if(this.initialValue) this.cateId=this.initialValue
   }
 }
 </script>

@@ -11,7 +11,7 @@
       <!-- 封面   -->
       <div class="cover"><el-image :src="data.cover" class="cover" fit="cover"/></div>
       <!-- 简介   -->
-      <div>{{data.brief}}</div>
+      <div style="font-size: 14px;color: gray">{{data.brief}}</div>
     </div>
     <!-- 底部  -->
     <div class="bottomWrapper">

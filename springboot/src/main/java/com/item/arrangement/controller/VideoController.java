@@ -33,8 +33,6 @@ public class VideoController extends BaseController{
         if(getAccount().getType().equals("user")){
             video.setAuthorId(getAccount().getId());
         }
-        String localSrc=video.getSrc();
-        video.setSrc(localSrc.replace("files/","files/video/"));
         video.setTime(new Date()); //设置创建时间
         videoMapper.insert(video);
         return Result.success();
@@ -72,8 +70,8 @@ public class VideoController extends BaseController{
     public Result<?> getById(@PathVariable Integer id){
         Video v=videoMapper.selectById(id);
         if(v!=null) {
-            v.setCateName(categoryMapper.selectById(v.getCateId()).getName());
-            v.setLocationName(locationMapper.selectById(v.getLocationId()).getName());
+            if(v.getCateId()!=null) v.setCateName(categoryMapper.selectById(v.getCateId()).getName());
+            if(v.getLocationId()!=null) v.setLocationName(locationMapper.selectById(v.getLocationId()).getName());
             return Result.success(v);
         }
         return Result.error("404","视频不见了");

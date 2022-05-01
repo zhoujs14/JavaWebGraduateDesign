@@ -35,7 +35,7 @@
         <el-upload
             class="upload-demo"
             drag
-            action="http://localhost:9090/files/upload"
+            action="http://localhost:9090/files/videoUpload"
             multiple
             :on-success="uploadVideoSuccess"
             :before-upload="beforeVideoUpload"
@@ -90,7 +90,6 @@ export default {
     //上传封面成功
     uploadCoverSuccess(res){
       if(res?.data?.length>0) {
-
         this.video.cover=res.data
         this.$message({type:"success",message:"上传成功"})
       }

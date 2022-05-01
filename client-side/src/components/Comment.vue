@@ -107,7 +107,7 @@ export default {
       }).then(res=>{
         if(res?.code==='0'){
           this.$message({type:'success',message:'评论成功'})
-          window.location.reload()
+          this.$emit("onSubmit")
         }else {
           this.$message({type:'error',message:'评论失败;'+res?.msg})
         }

@@ -34,12 +34,12 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="收纳物品分类">
-            <CateSelect @categorySelect="selectCate"/>
+            <CateSelect :initial-value="editBlog?.cateId||0" @categorySelect="selectCate"/>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="收纳位置分类">
-            <LocationSelect @locationSelect="selectLocation"/>
+            <LocationSelect :initial-value="editBlog?.locationId||0" @locationSelect="selectLocation"/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -180,7 +180,7 @@ export default {
     else {
       let localBlog=JSON.parse(sessionStorage.getItem("blog"))
       if(!!localBlog) this.blog=localBlog
-      this.initializeEditor()
+      this.initializeEditor(localBlog?.content)
     }
   }
 }

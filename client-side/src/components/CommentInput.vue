@@ -29,6 +29,7 @@ export default {
   methods:{
     submit(){
       this.$emit('onSubmit',this.content)
+      this.content=''
     }
   },
   created() {

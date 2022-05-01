@@ -10,6 +10,7 @@ import request from "../../utils/request";
 
 export default {
   name: "LocationSelect",
+  props:["initialValue"],
   data(){
     return {
       locationId:'',
@@ -35,6 +36,7 @@ export default {
   },
   created() {
     this.getLocations()
+    if(this.initialValue) this.locationId=this.initialValue
   }
 }
 </script>

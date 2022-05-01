@@ -86,14 +86,28 @@ public class WatchController extends BaseController{
         for(Watch record:watchHistory){
             Integer cid=record.getContentId();
             if(record.getType().equals("blog")){
-                record.setTitle(blogMapper.selectById(cid).getTitle());
-                record.setCover(blogMapper.selectById(cid).getCover());
-                record.setAuthorName(userMapper.selectById(blogMapper.selectById(cid).getAuthorId()).getNickName());
+                Blog b=blogMapper.selectById(cid);
+                if(b==null) {
+                    watchHistory.remove(record);
+                    blogMapper.deleteById(record.getId());
+                }
+                else{
+                    record.setTitle(b.getTitle());
+                    record.setCover(b.getCover());
+                    record.setAuthorName(userMapper.selectById(b.getAuthorId()).getNickName());
+                }
             }
             else {
-                record.setTitle(videoMapper.selectById(cid).getTitle());
-                record.setCover(videoMapper.selectById(cid).getCover());
-                record.setAuthorName(userMapper.selectById(videoMapper.selectById(cid).getAuthorId()).getNickName());
+                Video v=videoMapper.selectById(cid);
+                if(v==null){
+                    watchHistory.remove(record);
+                    watchMapper.deleteById(record.getId());
+                }
+                else {
+                    record.setTitle(v.getTitle());
+                    record.setCover(v.getCover());
+                    record.setAuthorName(userMapper.selectById(v.getAuthorId()).getNickName());
+                }
             }
         }
         return Result.success(watchHistory);

@@ -40,6 +40,30 @@ public class FileController {
     private NonStaticResourceHttpRequestHandler nonStaticResourceHttpRequestHandler;
 
     /**
+     * 视频上传接口，直接保存到target目录
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    @CrossOrigin //允许跨域
+    @PostMapping("/videoUpload")
+    public Result<?> uploadVideo(MultipartFile file) {
+        String fileName=file.getOriginalFilename();
+        String uuid= IdUtil.fastSimpleUUID(); //生成uuid
+        String sourcePath = ClassUtils.getDefaultClassLoader().getResource("").getPath().substring(1);
+        String realPath = sourcePath +"files/"+uuid+"_"+fileName;
+
+        try {
+            FileUtil.writeBytes(file.getBytes(),realPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Result.error("-1",e.getMessage());
+        }
+
+        return Result.success(ip+":"+port+"/files/video/"+uuid);
+    }
+
+    /**
      * 文件上传接口
      * @param file
      * @return
@@ -132,15 +156,17 @@ public class FileController {
      */
     @GetMapping("/video/{uuid}")
     public void getVideo(HttpServletRequest request, HttpServletResponse response, @PathVariable String uuid) throws IOException, ServletException {
-        String basePath=System.getProperty("user.dir")+"/springboot/src/main/resources/files/"; //获取上传路径
-        List<String> fileNames=FileUtil.listFileNames(basePath);
+        //String basePath=System.getProperty("user.dir")+"/springboot/src/main/resources/files/"; //获取上传路径
+        //List<String> fileNames=FileUtil.listFileNames(basePath);
+        //String fileName=fileNames.stream().filter(name->name.contains(uuid)).findAny().orElse("");
+
+        String sourcePath = ClassUtils.getDefaultClassLoader().getResource("").getPath().substring(1);
+        List<String> fileNames=FileUtil.listFileNames(sourcePath+"/files/");
         String fileName=fileNames.stream().filter(name->name.contains(uuid)).findAny().orElse("");
 
         if(StrUtil.isNotEmpty(fileName)){
             //获取编译后 resources 文件夹的绝对地址
-            String sourcePath = ClassUtils.getDefaultClassLoader().getResource("").getPath().substring(1);
             String realPath = sourcePath +"files/"+fileName;
-
             Path filePath = Paths.get(realPath);
 
             if (Files.exists(filePath)) {

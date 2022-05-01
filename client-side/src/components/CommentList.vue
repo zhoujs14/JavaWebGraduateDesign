@@ -5,7 +5,7 @@
       <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
         <li v-for="c in records" :key="c" class="infinite-list-item" :infinite-scroll-disabled="isOver">
           <el-divider style="margin: 8px 0"/>
-          <Comment :comment="c" :layer="0"/>
+          <Comment :comment="c" :layer="0" @onSubmit="onSubmit"/>
         </li>
       </ul>
     </div>
@@ -77,7 +77,6 @@ export default {
           }).then(res=>{
             if(res?.code==='0'){
               this.records=this.records.concat(res.data.records)
-              console.log('records:',this.records)
               if(res?.data?.total<=this.pageSize*this.currentPage) this.isOver=true //已加载全部内容
               this.currentPage+=1
             }
@@ -87,7 +86,6 @@ export default {
           }).finally(
               ()=> {
                 this.inquiring = false
-                console.log(this.records)
               }
           )
         }
@@ -101,8 +99,7 @@ export default {
       request.post("/comment", this.comment).then(res => {
         if (res?.code === '0') {
           this.$message({type: 'success', message: '评论成功'})
-          this.comment.content=''
-          window.location.reload()
+          this.onSubmit()
         } else {
           this.$message({type: 'error', message: '评论失败,' + res?.msg})
         }
@@ -111,6 +108,21 @@ export default {
             this.load()
           }
       )
+    },
+    onSubmit(){
+      this.initialize()
+      this.load()
+    },
+    initialize(){
+      this.currentPage=1,
+      this.pageSize= 10,
+      this.records=[],
+      this.isOver=false,
+      this.comment={
+          type:this.type,
+          content:"",
+          rootId: this.id
+      }
     }
   },
   created() {
