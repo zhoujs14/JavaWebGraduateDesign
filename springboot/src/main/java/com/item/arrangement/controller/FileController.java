@@ -154,12 +154,35 @@ public class FileController {
      * @param response
      * @param uuid
      */
+    @GetMapping("/downloadVideo/{uuid}")
+    public void downloadVideo(HttpServletResponse response,@PathVariable String uuid){
+        OutputStream os;
+        String sourcePath = ClassUtils.getDefaultClassLoader().getResource("").getPath().substring(1);
+        List<String> fileNames=FileUtil.listFileNames(sourcePath+"/files/");
+        String fileName=fileNames.stream().filter(name->name.contains(uuid)).findAny().orElse("");
+        try{
+            if(StrUtil.isNotEmpty(fileName)){
+                response.addHeader("Content-Disposition","attachment;filename="+ URLEncoder.encode(fileName,"UTF-8"));
+                response.setContentType("application/octet-stream");
+                //读取文件字节流
+                byte[] bytes=FileUtil.readBytes(sourcePath +"files/"+fileName);
+                os=response.getOutputStream();
+                os.write(bytes);
+                os.flush();
+                os.close();
+            }
+        }catch (Exception e){
+            System.out.println("下载文件失败"+e.getMessage());
+        }
+    }
+
+    /**
+     * 视频下载接口
+     * @param response
+     * @param uuid
+     */
     @GetMapping("/video/{uuid}")
     public void getVideo(HttpServletRequest request, HttpServletResponse response, @PathVariable String uuid) throws IOException, ServletException {
-        //String basePath=System.getProperty("user.dir")+"/springboot/src/main/resources/files/"; //获取上传路径
-        //List<String> fileNames=FileUtil.listFileNames(basePath);
-        //String fileName=fileNames.stream().filter(name->name.contains(uuid)).findAny().orElse("");
-
         String sourcePath = ClassUtils.getDefaultClassLoader().getResource("").getPath().substring(1);
         List<String> fileNames=FileUtil.listFileNames(sourcePath+"/files/");
         String fileName=fileNames.stream().filter(name->name.contains(uuid)).findAny().orElse("");

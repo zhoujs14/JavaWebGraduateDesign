@@ -7,7 +7,7 @@
       <div class="row">
         <span>选择收纳物品种类:</span><CateSelect style="width: 140px;margin-right: 25px" @categorySelect="setCid"/>
         <span>选择收纳场所:</span><LocationSelect style="width: 140px;margin-right: 25px" @locationSelect="setLid"/>
-        <SearchBar style="width: 400px"/>
+        <SearchBar style="width: 400px" @handleSearch="handleSearch"/>
       </div>
       <el-tab-pane label="文章">
         <StarList type="blog" :category-id="cid" :location-id="lid" :key-words="keyWords" :search-pattern="searchPattern"/>
@@ -44,6 +44,10 @@ export default {
     },
     setLid(val){
       this.lid=val
+    },
+    handleSearch(args){
+      this.searchPattern=args.searchPattern
+      this.keyWords=args.keyWords
     }
   }
 }

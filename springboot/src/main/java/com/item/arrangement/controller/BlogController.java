@@ -59,8 +59,8 @@ public class BlogController extends BaseController{
     public Result<?> getById(@PathVariable Integer id){
         Blog b=blogMapper.selectById(id);
         if(b!=null) {
-            if(b.getCateId()!=null) b.setCateName(categoryMapper.selectById(b.getCateId()).getName());
-            if(b.getLocationId()!=null) b.setLocationName(locationMapper.selectById(b.getLocationId()).getName());
+            if(b.getCateId()!=null&&b.getCateId()!=0) b.setCateName(categoryMapper.selectById(b.getCateId()).getName());
+            if(b.getLocationId()!=null&&b.getLocationId()!=0) b.setLocationName(locationMapper.selectById(b.getLocationId()).getName());
             return Result.success(b);
         }
         return Result.error("404","文章不见了");

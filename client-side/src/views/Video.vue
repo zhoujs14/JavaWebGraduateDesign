@@ -172,7 +172,7 @@ export default {
         if(res?.code==='0'){
           this.currentVideo=res.data
           this.queryAuthor()
-          this.downloadUrl='http://localhost:9090/files/'+this.currentVideo.src.slice(34)
+          this.downloadUrl='http://localhost:9090/files/downloadVideo/'+this.currentVideo.src.slice(34)
           player = new Player({
             id: 'mse',
             url: this.currentVideo.src,

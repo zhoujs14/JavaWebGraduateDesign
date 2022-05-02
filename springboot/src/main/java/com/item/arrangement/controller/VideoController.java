@@ -70,8 +70,8 @@ public class VideoController extends BaseController{
     public Result<?> getById(@PathVariable Integer id){
         Video v=videoMapper.selectById(id);
         if(v!=null) {
-            if(v.getCateId()!=null) v.setCateName(categoryMapper.selectById(v.getCateId()).getName());
-            if(v.getLocationId()!=null) v.setLocationName(locationMapper.selectById(v.getLocationId()).getName());
+            if(v.getCateId()!=null&&v.getCateId()!=0) v.setCateName(categoryMapper.selectById(v.getCateId()).getName());
+            if(v.getLocationId()!=null&&v.getLocationId()!=0) v.setLocationName(locationMapper.selectById(v.getLocationId()).getName());
             return Result.success(v);
         }
         return Result.error("404","视频不见了");

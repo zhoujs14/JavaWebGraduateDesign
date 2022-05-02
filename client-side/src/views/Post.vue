@@ -21,7 +21,7 @@
         <!-- 帖子列表       -->
         <template v-if="this.records.length>0">
           <el-row  v-for="item in records" style="padding: 4px 8px">
-            <el-col :span="16">
+            <el-col :span="16" style="cursor: pointer" @click="this.$router.push(`/postDetail?pid=${item.id}`)">
               <a :href="`/postDetail?pid=${item.id}`" style="font-size: 17px;margin-bottom: 14px">{{item.title}}</a>
               <div v-html="item.content" style="font-size: 8px;overflow: hidden;max-height: 90px"/>
             </el-col>
@@ -42,7 +42,7 @@
         />
       </el-card>
       <!-- 发帖   -->
-      <el-card style="margin-top: 24px">
+      <el-card style="margin-top: 24px;min-height: 25vh">
         <PostForm @onSubmit="load"/>
       </el-card>
     </el-col>
