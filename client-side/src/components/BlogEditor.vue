@@ -160,7 +160,7 @@ export default {
         toolbar = createToolbar({
           editor,
           selector: '#toolbar-container',
-          mode: 'default' // 或 'simple' 参考下文
+          mode: 'default'
         })
       })
     },

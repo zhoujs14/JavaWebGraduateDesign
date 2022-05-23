@@ -9,7 +9,7 @@
         <div id="editor-container" style="min-height: 20vh"></div>
       </div>
       <div class="row" style="justify-content: space-between">
-        <el-button type="primary" @click="save">发帖</el-button>
+        <el-button type="primary" @click="save" :disabled="formDisabled">发帖</el-button>
         <el-icon :size="20" style="cursor: pointer" @click="this.reset"><delete/></el-icon>
       </div>
     </el-form>
@@ -25,7 +25,7 @@ let editor,toolbar
 
 export default {
   name: "PostForm",
-  props:["parentId","focus"],
+  props:["parentId","focus","formDisabled"],
   data(){
     return {
       form:{
@@ -37,14 +37,13 @@ export default {
   watch:{
     focus:{
       handler(){
-        console.log("focus repost")
         editor.focus()
       }
     }
   },
   methods:{
     //初始化编辑器 @param:初始内容
-    initializeEditor(content){
+    commentditor(content){
       //在弹窗内创建编辑器
       this.$nextTick(()=>{
         editorConfig={MENU_CONF: {}}
@@ -79,7 +78,7 @@ export default {
         title: '',
         content: ''
       }
-      this.initializeEditor()
+      this.commentditor()
     },
     save(){
       this.form.content=editor.getHtml()
@@ -98,7 +97,7 @@ export default {
     }
   },
   created() {
-    this.initializeEditor()
+    this.commentditor()
   },
 }
 </script>

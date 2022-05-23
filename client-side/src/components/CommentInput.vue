@@ -1,5 +1,5 @@
 <template>
-  <el-row style="margin-bottom: 14px">
+  <el-row style="margin-bottom: 14px;margin-top: 4px">
     <el-col :span="2" class="center">
       <el-avatar :src="avatar"/>
     </el-col>
@@ -11,7 +11,7 @@
       </el-input>
     </el-col>
     <el-col :span="2" class="center">
-      <el-button @click="submit" type="primary">评论</el-button>
+      <el-button @click="submit" type="primary" :disabled="btnDisabled">评论</el-button>
     </el-col>
   </el-row>
 </template>
@@ -23,7 +23,8 @@ export default {
   data(){
     return {
       content:'',
-      avatar:''
+      avatar:'',
+      btnDisabled:false
     }
   },
   methods:{
@@ -34,7 +35,8 @@ export default {
   },
   created() {
     let user= JSON.parse(sessionStorage.getItem('user'))
-    this.avatar=user.avatarSrc
+    if(user!==null) this.avatar=user.avatarSrc
+    else this.btnDisabled=true
   }
 }
 </script>

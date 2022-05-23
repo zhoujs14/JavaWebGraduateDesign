@@ -16,6 +16,12 @@
         </div>
       </el-col>
       <el-col :span="2" class="center">
+        <el-dropdown v-if="this.comment.authorId===this.user?.id">
+          <el-icon><more /></el-icon>
+          <template #dropdown>
+            <el-button style="padding: 8px 14px;font-size: 14px" type="text" @click="deleteComment">删除</el-button>
+          </template>
+        </el-dropdown>
       </el-col>
     </el-row>
 <!--    子评论-->
@@ -38,14 +44,22 @@
 
 <!--  子级评论-->
   <div v-else>
-    <div class="row" style="margin-top: 4px">
+    <div class="row" style="margin-top: 4px;justify-content: space-between">
     <!-- 内容 -->
-      <el-avatar :src="comment.avatarSrc" :size="25" style="margin-right: 12px"/>
-      <div style="font-size: 13px;color: palevioletred;margin-right: 4px">{{comment.authorName}}</div>
-      <div style="font-size: 14px">
-        <span v-if="this.layer>1" style="color: dodgerblue">回复:@{{this.parent.authorName}}</span>
-        {{comment.content}}
+      <div class="row">
+        <el-avatar :src="comment.avatarSrc" :size="25" style="margin-right: 12px"/>
+        <div style="font-size: 13px;color: palevioletred;margin-right: 4px">{{comment.authorName}}</div>
+        <div style="font-size: 14px">
+          <span v-if="this.layer>1" style="color: dodgerblue">回复:@{{this.parent.authorName}}</span>
+          {{comment.content}}
+        </div>
       </div>
+      <el-dropdown v-if="this.comment.authorId===this.user?.id">
+        <el-icon><more /></el-icon>
+        <template #dropdown>
+          <el-button style="padding: 8px 14px;font-size: 14px" type="text" @click="deleteComment">删除</el-button>
+        </template>
+      </el-dropdown>
     </div>
     <div class="row" style="margin-top: 6px;margin-left: 37px">
       <div style="font-size: 10px;color: gray">{{comment.time}}</div>
@@ -74,7 +88,8 @@ export default {
     return{
       inputVisible:false,
       inputParent:{},
-      placeholder: null
+      placeholder: null,
+      user:{}
     }
   },
   methods:{
@@ -112,9 +127,20 @@ export default {
           this.$message({type:'error',message:'评论失败;'+res?.msg})
         }
       })
+    },
+    deleteComment(){
+      request.delete("/comment/"+this.comment.id).then(res=>{
+        if(res?.code==='0'){
+          this.$message({type:'success',message:'删除评论成'});
+          window.location.reload()
+        }
+        else this.$message({type:'error',message:'删除评论失败;'+res?.msg})
+      })
     }
   },
   created() {
+    let user=sessionStorage.getItem("user")
+    this.user=JSON.parse(user)
   }
 }
 </script>

@@ -52,10 +52,10 @@
         </el-upload>
       </el-form-item>
       <el-form-item label="收纳物品分类">
-        <CateSelect @categorySelect="selectCate"/>
+        <CateSelect :initial-value="editVideo?.cateId||0" @categorySelect="selectCate"/>
       </el-form-item>
       <el-form-item label="收纳位置分类">
-        <LocationSelect @locationSelect="selectLocation"/>
+        <LocationSelect :initial-value="editVideo?.locationId||0" @locationSelect="selectLocation"/>
       </el-form-item>
       <el-divider/>
     </el-form>

@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%;height: 100vh;background-color: #f1faee;overflow: hidden">
+  <div style="width: 100%;height: 100vh;overflow: hidden">
     <div style="width: 400px;margin:150px auto;text-align: center">
       <div style="color: black;font-size: 30px;padding-bottom: 20px">注册新账号</div>
       <el-form ref="form" :model="form" :rules="rules">
@@ -101,7 +101,7 @@ export default {
             if(res?.code==='0'){
               //注册成功
               this.$message({type:"success",message:"注册成功"})
-              this.$router.push("/login"); //登录成功跳转登录页面
+              this.$router.push("/login"); //注册成功跳转登录页面
             }else{
               //注册失败
               this.$message({type:"error",message:`注册失败，${res?.msg}`})

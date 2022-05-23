@@ -17,7 +17,7 @@
         </div>
       </div>
       <!--  非根节点显示评论    -->
-      <div v-if="post.parentId" style="background-color: ghostwhite;margin: 4px 4px 12px 4px;padding:8px 4px 1px 4px;">
+      <div v-if="post.parentId" style="background-color: ghostwhite;margin: 4px 16px 12px 16px;padding:8px 4px 1px 4px;">
         <CommentList type="post" :id="post.id" input-position="bottom" @showInput="showInput"/>
         <CommentInput v-if="inputVisible" @onSubmit="save" :placeholder="placeholder"/>
       </div>

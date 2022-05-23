@@ -43,7 +43,7 @@
       </el-card>
       <!-- 发帖   -->
       <el-card style="margin-top: 24px;min-height: 25vh">
-        <PostForm @onSubmit="load"/>
+        <PostForm @onSubmit="load" :disabled="formDisabled"/>
       </el-card>
     </el-col>
   </el-row>
@@ -69,6 +69,7 @@ export default {
       currentPage:1,
       pageSize:10,
       total: 0,
+      formDisabled:false
     }
   },
   methods:{
@@ -119,7 +120,8 @@ export default {
   },
   created() {
     let user=JSON.parse(sessionStorage.getItem('user'))
-    this.user=user
+    if(user!==null) this.user=user
+    else this.formDisabled=true
     this.initialize()
     this.load()
   }

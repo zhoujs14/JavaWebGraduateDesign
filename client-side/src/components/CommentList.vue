@@ -1,4 +1,5 @@
 <template>
+<!--  教程评论列表-->
   <div v-if="type!=='post'">
     <CommentInput @onSubmit="save"/>
     <div>
@@ -10,12 +11,14 @@
       </ul>
     </div>
   </div>
+<!--  讨论帖评论列表-->
   <div v-else>
-    <div>
+    <div v-if="records.length>0">
       <ul v-infinite-scroll="load" class="infinite-list" style="overflow: auto">
-        <li v-for="c in records" :key="c" class="infinite-list-item" :infinite-scroll-disabled="isOver">
+        <li v-for="(c,index) in records" :key="c" class="infinite-list-item" :infinite-scroll-disabled="isOver">
           <Comment :comment="c" :layer="1" @showInput="showInput"/>
-          <el-divider style="margin: 4px 0"/>
+          <el-divider v-if="index!==records.length-1" style="margin: 4px 0"/>
+          <div v-else style="padding-bottom: 8px"/>
         </li>
       </ul>
     </div>
