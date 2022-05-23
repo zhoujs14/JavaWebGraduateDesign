@@ -25,4 +25,8 @@
         left join user on user.id = comment.author_id
         where `comment`.type='video' and `comment`.root_id = #{videoId}
     </select>
+    <select id="findPage" resultMap="commentMap">
+        SELECT `comment`.* ,user.nick_name from `comment`
+        left join user on user.id = comment.author_id
+    </select>
 </mapper>

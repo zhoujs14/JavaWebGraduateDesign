@@ -9,6 +9,7 @@
         <result property="authorId" column="author_id"/>
         <result property="parentId" column="parent_id"/>
         <result property="time" column="time"/>
+        <result property="repostCount" column="repost_count"/>
         <result property="authorName" column="nick_name"/>
         <result property="authorAvatar" column="avatar_src"/>
     </resultMap>
