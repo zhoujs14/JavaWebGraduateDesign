@@ -41,8 +41,11 @@ public class BlogController extends BaseController{
     //更新
     @PutMapping
     public Result<?> update(@RequestBody Blog blog){
-        blogMapper.updateById(blog);
-        return Result.success();
+        if(getAdmin()!=null||getUser().getId().equals(blog.getAuthorId())) {
+            blogMapper.updateById(blog);
+            return Result.success();
+        }
+        return Result.error("402","非法更新，请检查登录账号");
     }
 
     //删除博客

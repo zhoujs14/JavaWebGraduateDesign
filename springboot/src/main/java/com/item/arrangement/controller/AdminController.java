@@ -71,6 +71,15 @@ public class AdminController extends BaseController {
         return Result.success(a);
     }
 
+    //查询管理员
+    @GetMapping("/info/{id}")
+    public Result<Admin> getInfo(@PathVariable Integer id){
+        if(getAdmin()==null) return Result.error("401","清先登录");
+        Admin res=adminMapper.selectById(id);
+        if(getAdmin().getLevel()>=res.getLevel()&&getAdmin().getId()!=id) return Result.error("402","你无权操作更高级或同级账号");
+        return Result.success(res);
+    }
+
     //分页查询
     @GetMapping
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum, //页码

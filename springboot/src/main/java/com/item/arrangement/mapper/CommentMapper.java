@@ -7,4 +7,5 @@ import com.item.arrangement.entity.Comment;
 public interface CommentMapper extends BaseMapper<Comment> {
     Page<Comment> findBlogPage(Page<Comment> page,Integer blogId);
     Page<Comment> findVideoPage(Page<Comment> page,Integer videoId);
+    Page<Comment> findPage(Page<Comment> page);
 }

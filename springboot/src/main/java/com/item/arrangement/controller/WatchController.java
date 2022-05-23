@@ -38,7 +38,8 @@ public class WatchController extends BaseController{
     //新增
     @PostMapping
     public Result<?> watch(@RequestBody Watch watch){
-        if(getAccount().getType().equals("user")){
+        if(getAccount()==null) return Result.error("402","未登录，不计入观看量");
+        else {
             Integer uid=getAccount().getId();
             watch.setUid(uid);
             watch.setTime(new Date());
@@ -70,7 +71,7 @@ public class WatchController extends BaseController{
             }
             return Result.success();
         }
-        else return Result.error("401","请先登录");
+
     }
 
 

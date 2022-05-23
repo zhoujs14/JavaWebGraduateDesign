@@ -177,7 +177,7 @@ public class FileController {
     }
 
     /**
-     * 视频下载接口
+     * 视频播放接口
      * @param response
      * @param uuid
      */

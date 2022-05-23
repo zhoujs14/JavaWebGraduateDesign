@@ -28,13 +28,19 @@ public class PostController extends BaseController{
     @Resource
     UserMapper userMapper;
 
-    //新增博客
+    //新增帖子
     @PostMapping
     public Result<?> save(@RequestBody Post post){
         if(getAccount().getType().equals("user")){
             post.setAuthorId(getAccount().getId());
         }
         post.setTime(new Date()); //设置创建时间
+        //更新父节点回帖数
+        if(post.getParentId()!=null) {
+            Post parent=postMapper.selectById(post.getParentId());
+            parent.setRepostCount(parent.getRepostCount()+1);
+            postMapper.updateById(parent);
+        }
         postMapper.insert(post);
         return Result.success();
     }
@@ -56,6 +62,12 @@ public class PostController extends BaseController{
             }
             else {
                 postMapper.deleteById(id);
+                //更新所属帖子回帖数
+                if(res.getParentId()!=null){
+                    Post parent=postMapper.selectById(res.getParentId());
+                    parent.setRepostCount(parent.getRepostCount()-1);
+                    postMapper.updateById(parent);
+                }
                 return Result.success();
             }
         }

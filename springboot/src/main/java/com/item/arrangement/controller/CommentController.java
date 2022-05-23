@@ -1,5 +1,6 @@
 package com.item.arrangement.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -49,9 +50,47 @@ public class CommentController extends BaseController{
 
     //删除
     @DeleteMapping("/{id}") //占位符 /{aa}/{bb} ==> (@PathVariable aa的类型 aa,@PathVariable bb的类型 bb)
-    public Result<?> delete(@PathVariable Long id){
-        commentMapper.deleteById(id);
-        return Result.success();
+    public Result<?> delete(@PathVariable Integer id){
+        Comment res=commentMapper.selectById(id);
+        if(getAccount().getType().equals("user")){
+            if(getAccount().getId()!=res.getAuthorId()){
+                return Result.error("402","只能删除自己发布的评论");
+            }
+            List<Comment> commentList=loopQuery(id,commentMapper.selectList(new LambdaQueryWrapper<Comment>()));
+            loopDelete(commentList);
+            commentMapper.deleteById(id);
+            return Result.success();
+        }
+        else if(getAccount().getType().equals("admin")){
+            List<Comment> commentList=loopQuery(id,commentMapper.selectList(new LambdaQueryWrapper<Comment>()));
+            loopDelete(commentList);
+            commentMapper.deleteById(id);
+            return Result.success();
+        }
+        else return Result.error("402","账号类型错误");
+
+    }
+
+    //递归删除子评论
+    private void loopDelete(List<Comment> commentList){
+        for(Comment c:commentList){
+            if(c.getChildren().size()>0){
+                loopDelete(c.getChildren());
+            }
+            commentMapper.deleteById(c.getId());
+        }
+    }
+
+    //分页查询
+    @GetMapping("/admin")
+    public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum,
+                              @RequestParam(defaultValue = "10") Integer pageSize,
+                              @RequestParam(defaultValue = "") String keyWords){ //搜索关建字
+        //查询对应id内容的全部评论
+        LambdaQueryWrapper<Comment> wrapper=Wrappers.lambdaQuery();
+        if(StrUtil.isNotBlank(keyWords)) wrapper.like(Comment::getAuthorId,keyWords); //输入不为空才使用like模糊查询
+        Page<Comment> commentPage=commentMapper.selectPage(new Page<>(pageNum,pageSize),wrapper);
+        return Result.success(commentPage);
     }
 
     //分页查询

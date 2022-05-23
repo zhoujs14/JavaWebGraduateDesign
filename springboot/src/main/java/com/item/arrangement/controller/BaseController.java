@@ -29,6 +29,7 @@ public class BaseController {
      */
     public Admin getAdmin() {
         String token = request.getHeader("token");
+        if(token==null) return null;
         String aud = JWT.decode(token).getAudience().get(0);
         Integer adminId = Integer.valueOf(aud);
         return adminMapper.selectById(adminId);
@@ -36,6 +37,7 @@ public class BaseController {
 
     public User getUser() {
         String token = request.getHeader("token");
+        if(token==null) return null;
         String aud = JWT.decode(token).getAudience().get(0);
         Integer userId = Integer.valueOf(aud);
         return userMapper.selectById(userId);
@@ -43,6 +45,7 @@ public class BaseController {
 
     public Account getAccount(){
         String token = request.getHeader("token");
+        if(token==null) return null;
         String aud = JWT.decode(token).getAudience().get(0);
         String type=JWT.decode(token).getClaim("type").asString();
         if(type.equals("admin"))

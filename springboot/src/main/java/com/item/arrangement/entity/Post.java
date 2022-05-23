@@ -19,6 +19,7 @@ public class Post {
     private String content;
     private Integer authorId;
     private Integer parentId;
+    private Integer repostCount;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date time;
 

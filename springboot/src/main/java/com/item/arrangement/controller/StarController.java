@@ -90,6 +90,9 @@ public class StarController extends BaseController{
     @GetMapping
     public Result<Integer> queryIsLike(@RequestParam String type,@RequestParam Integer cid)
     {
+        if(getAccount()==null){
+            return Result.success(-1);
+        }
         //查询登录用户记录
         Integer uid=getAccount().getId();
         LambdaQueryWrapper<Star> wrapper= Wrappers.<Star>lambdaQuery();

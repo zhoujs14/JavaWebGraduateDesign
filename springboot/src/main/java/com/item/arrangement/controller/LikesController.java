@@ -84,6 +84,9 @@ public class LikesController extends BaseController{
     @GetMapping
     public Result<Integer> queryIsLike(@RequestParam String type,@RequestParam Integer cid)
     {
+        if(getAccount()==null){
+            return Result.success(-1);
+        }
         //查询登录用户记录
         Integer uid=getAccount().getId();
         LambdaQueryWrapper<Likes> wrapper= Wrappers.<Likes>lambdaQuery();

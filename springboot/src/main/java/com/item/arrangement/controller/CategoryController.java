@@ -50,7 +50,7 @@ public class CategoryController extends BaseController{
         return Result.error("401","需要管理员权限");
     }
 
-    //分页查询
+    //查询
     @GetMapping
     public Result<?> getCategoryList(){
         LambdaQueryWrapper<Category> wrapper= Wrappers.<Category>lambdaQuery();
