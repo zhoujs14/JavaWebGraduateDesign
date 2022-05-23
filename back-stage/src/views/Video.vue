@@ -5,22 +5,21 @@
       <el-input v-model="keyWords" placeholder="请输入关键字" clearable style="width: 20%"/>
       <el-button style="margin-left: 10px" type="primary" :icon="searchIcon" @click="load">查询</el-button>
     </div>
-    <!--    功能区域-->
-    <div style="margin: 10px 0">
-      <el-button type="primary" @click="add">新增</el-button>
-    </div>
     <!--    表格-->
     <el-table :data="tableData" border stripe style="width: 100%" fit>
       <el-table-column prop="id" label="ID" sortable />
       <el-table-column prop="title" label="标题" />
       <el-table-column prop="authorId" label="作者id" />
+      <el-table-column prop="authorName" label="作者昵称" />
       <el-table-column prop="time" label="发布时间" />
-      <el-table-column prop="cateID" label="类别id" />
       <el-table-column prop="cateName" label="类别名称" />
+      <el-table-column prop="locationName" label="位置名称" />
+      <el-table-column prop="watched" label="浏览量" />
+      <el-table-column prop="likesCount" label="点赞量" />
       <el-table-column fixed="right" label="操作" width="300px">
         <template #default="scope">
+          <el-button @click="watch(scope.row)" type="text" size="small">查看</el-button>
           <el-button @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
-          <el-button @click="read(scope.row)" type="text" size="small">查看</el-button>
           <!--          删除弹窗-->
           <el-popconfirm title="确认删除吗？" @confirm="handleDelete(scope.row.id)">
             <template #reference>
@@ -41,27 +40,9 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
       />
-      <!--      用户表单-->
-      <el-dialog v-model="dialogVisible" title="" width="70%">
-        <el-form :model="form" label-width="120px">
-          <el-form-item label="标题">
-            <el-input v-model="form.title" style="width: 80%"></el-input>
-          </el-form-item>
-          <div id="toolbar-container"></div>
-          <div id="editor-container" style="height: 60vh"></div>
-        </el-form>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
-            <el-button type="primary" @click="save">确认</el-button>
-          </span>
-        </template>
-      </el-dialog>
-      <!--      查看文章-->
-      <el-dialog ref="contentDialog" v-model="contentVisible" :title="this.currentBlog.title" width="70%">
-        <el-card>
-          <div v-html="currentBlog.content"></div>
-        </el-card>
+      <!--      表单-->
+      <el-dialog v-model="dialogVisible" title="" width="70%" destroy-on-close>
+        <VideoUploader :edit-video="currentVideo"/>
       </el-dialog>
     </div>
   </div>
@@ -70,20 +51,15 @@
 <script>
 import request from "../../utils/request";
 import { Search } from '@element-plus/icons-vue'
-import '@wangeditor/editor/dist/css/style.css'
-import { createEditor, createToolbar } from '@wangeditor/editor'
-
-let editorConfig= {}
-let editor,toolbar
-
+import VideoUploader from "../components/VideoUploader";
 
 export default {
   name: 'Video',
-  components: {},
+  components: {VideoUploader},
   data(){
     return {
       form:{},
-      dialogVisible:false, //新增用户弹窗是否可见
+      dialogVisible:false, //新增弹窗是否可见
       contentVisible:false, //文章详情是否可见
       tableData: [],
       total:this.tableData?.length||0,
@@ -91,7 +67,7 @@ export default {
       searchIcon:Search,
       currentPage:1,
       pageSize:10,
-      currentBlog:{
+      currentVideo:{
         title:"",
         content:"default"
       }
@@ -103,7 +79,7 @@ export default {
   methods:{
     //获取分页数据
     load(){
-      request.get("/blog",{
+      request.get("/video",{
         params:{
           pageNum:this.currentPage,
           pageSize:this.pageSize,
@@ -112,36 +88,6 @@ export default {
       }).then(res=>{
         this.tableData=res.data.records;
         this.total=res.data.total;
-      })
-    },
-    //初始化编辑器 @param:初始内容
-    initializeEditor(content){
-      //在弹窗内创建编辑器
-      this.$nextTick(()=>{
-        editorConfig={MENU_CONF: {}}
-        editorConfig.placeholder = '请输入内容'
-        //设置图片上传api
-        editorConfig.MENU_CONF['uploadImage'] = {
-          server: 'http://localhost:9090/files/blogImageUpload',
-          fieldName: 'file', //设置上传参数名称，需要与后台接受参数名一样
-        }
-
-        // 创建编辑器
-        editor?.destroy()
-        editor= createEditor({
-          html: content||"",
-          selector: '#editor-container',
-          config: editorConfig,
-          mode: 'default' // 或 'simple' 参考下文
-        })
-
-        // 创建工具栏
-        toolbar?.destroy()
-        toolbar = createToolbar({
-          editor,
-          selector: '#toolbar-container',
-          mode: 'default' // 或 'simple' 参考下文
-        })
       })
     },
     //新增文章弹窗
@@ -165,7 +111,7 @@ export default {
       this.form.content=editor.getHtml()  //获取编辑器内容到表单
       //修改文章
       if(this.form.id){
-        request.put("/blog",this.form).then(res=> {
+        request.put("/video",this.form).then(res=> {
           let options=res?.code==='0'?{type:"success",message:"编辑成功"}:{type:"error",message:"编辑失败,错误信息:"+res?.msg}
           this.$message(options)
           this.load();
@@ -173,7 +119,7 @@ export default {
       }
       //新增文章
       else {
-        request.post("/blog",this.form).then(res => {
+        request.post("/video",this.form).then(res => {
           let options=res?.code==='0'?{type:"success",message:"编辑成功"}:{type:"error",message:"编辑失败,错误信息:"+res?.msg}
           this.$message(options)
           this.load();
@@ -181,11 +127,9 @@ export default {
       }
       this.dialogVisible = false
     },
-    read(row){
-      this.contentVisible=true
-      this.$nextTick(()=>{
-        this.currentBlog=JSON.parse((JSON.stringify(row)))
-      })
+    watch(row){
+      //跳转详情页
+      window.open("http://localhost:9875/video?vid="+row.id,"_blank")
     },
     //分页大小改变
     handleSizeChange(newSize){
@@ -197,14 +141,12 @@ export default {
       this.currentPage=newCurrent;
       this.load();
     },
-    //编辑
     handleEdit(row){
-      this.form=JSON.parse(JSON.stringify(row)) //将行对象深拷贝到form
-      this.dialogVisible=true //显示表单
-      this.initializeEditor(this.form?.content)
+      this.currentVideo=row
+      this.dialogVisible=true
     },
     handleDelete(id){
-      request.delete(`/blog/${id}`).then(res=>{
+      request.delete(`/video/${id}`).then(res=>{
         let options=res?.code==='0'?{type:"success",message:"删除成功"}:{type:"error",message:"删除失败,错误信息:"+res.msg}
         this.$message(options)
         this.load();

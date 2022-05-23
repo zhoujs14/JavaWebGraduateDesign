@@ -12,11 +12,8 @@
 <!--    表格-->
     <el-table :data="tableData" border stripe style="width: 100%" fit>
       <el-table-column prop="id" label="ID" sortable />
-      <el-table-column prop="username" label="用户名" />
-      <el-table-column prop="nickName" label="昵称" />
-      <el-table-column prop="age" label="年龄" />
-      <el-table-column prop="gender" label="性别" />
-      <el-table-column fixed="right" label="操作" width="120">
+      <el-table-column prop="name" label="类别名" />
+      <el-table-column fixed="right" label="操作">
         <template #default="scope">
           <el-button @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
 <!--          删除弹窗-->
@@ -29,36 +26,12 @@
       </el-table-column>
     </el-table>
     <div style="margin: 10px 0">
-<!--      页码选择-->
-      <el-pagination
-          v-model:currentPage="currentPage"
-          :page-size="pageSize"
-          :page-sizes="[5, 10, 20]"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-      />
-<!--      用户表单-->
+<!-- 表单-->
       <el-dialog v-model="dialogVisible" title="" width="30%">
         <el-form :model="form" label-width="120px">
-          <el-form-item label="用户名">
-            <el-input v-model="form.username" style="width: 80%"></el-input>
+          <el-form-item label="类别名称">
+            <el-input v-model="form.name" style="width: 80%"></el-input>
           </el-form-item>
-          <el-form-item label="密码">
-            <el-input v-model="form.password" show-password style="width: 80%" ></el-input>
-          </el-form-item>
-         <el-form-item label="昵称">
-            <el-input v-model="form.nickName" style="width: 80%"></el-input>
-          </el-form-item>
-         <el-form-item label="年龄">
-            <el-input v-model="form.age" style="width: 80%"></el-input>
-         </el-form-item>
-         <el-form-item label="性别">
-            <el-radio v-model="form.gender" label="男">男</el-radio>
-            <el-radio v-model="form.gender" label="女">女</el-radio>
-            <el-radio v-model="form.gender" label="未知">未知</el-radio>
-         </el-form-item>
         </el-form>
         <template #footer>
           <span class="dialog-footer">
@@ -84,7 +57,7 @@ export default {
   data(){
     return {
       form:{},
-      dialogVisible:false, //新增用户弹窗是否可见
+      dialogVisible:false, //新增弹窗是否可见
       tableData: tableData,
       total:tableData.length||0,
       keyWords:"",
@@ -99,27 +72,20 @@ export default {
   methods:{
     //获取分页数据
     load(){
-      request.get("/user",{
-        params:{
-          pageNum:this.currentPage,
-          pageSize:this.pageSize,
-          keyWords:this.keyWords
-        }
-      }).then(res=>{
-        this.tableData=res.data.records;
-        this.total=res.data.total;
+      request.get("/location").then(res=>{
+        this.tableData=res.data;
       })
     },
     //新增用户弹窗
     add(){
       this.dialogVisible=true;
-      this.form={gender:'未知'}; //清空之前的表单域
+      this.form={name:''}; //清空之前的表单域
     },
     //保存修改或新增用户
     save(){
       //修改用户
       if(this.form.id){
-        request.put("/user",this.form).then(res=> {
+        request.put("/location",this.form).then(res=> {
           let options=res?.code==='0'?{type:"success",message:"编辑成功"}:{type:"error",message:"编辑失败,错误信息:"+res.msg}
           this.$message(options)
           this.load();
@@ -127,24 +93,14 @@ export default {
       }
       //新增用户
       else {
-        request.post("/user",this.form).then(res => {
-          let options=res?.code==='0'?{type:"success",message:"新增成功"}:{type:"error",message:"新增失败,错误信息:"+res.msg}
+        request.post("/location",this.form).then(res => {
+          let options=res?.code==='0'?{type:"success",message:"编辑成功"}:{type:"error",message:"编辑失败,错误信息:"+res.msg}
           this.$message(options)
           this.load();
         })
       }
 
       this.dialogVisible = false
-    },
-    //分页大小改变
-    handleSizeChange(newSize){
-      this.pageSize=newSize;
-      this.load();
-    },
-    //页码切换
-    handleCurrentChange(newCurrent){
-      this.currentPage=newCurrent;
-      this.load();
     },
     //编辑
     handleEdit(row){
@@ -153,7 +109,7 @@ export default {
       this.dialogVisible=true; //显示表单
     },
     handleDelete(id){
-      request.delete(`/user/${id}`).then(res=>{
+      request.delete(`/location/${id}`).then(res=>{
         let options=res?.code==='0'?{type:"success",message:"删除成功"}:{type:"error",message:"删除失败,错误信息:"+res.msg}
         this.$message(options)
         this.load();

@@ -37,7 +37,6 @@ export default {
       }
       else {
         this.nickName = '访客'
-        this.$router.push("/login")
       }
     },
     exit(){

@@ -44,7 +44,7 @@
             <el-input v-model="form.username" style="width: 80%" placeholder="输入用户名"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
-            <el-input v-model="form.password" style="width: 80%" placeholder="输入密码"></el-input>
+            <el-input v-model="form.password" style="width: 80%" placeholder="输入密码" show-password></el-input>
           </el-form-item>
           <el-form-item label="权限等级" prop="level">
             <el-radio v-model="form.level" :label="0" :disabled="this.level>0">lv0</el-radio>
@@ -131,13 +131,13 @@ export default {
     },
     //保存修改或新增用户
     save(){
-
+      console.log(this.form)
       this.$refs["form"].validate(valid=>{
         if(valid){
           //修改用户
           if(this.form.id){
             request.put("/admin",this.form).then(res=> {
-              let options=res?.code==='0'?{type:"success",message:"编辑成功"}:{type:"error",message:"编辑失败,错误信息:"+res?.msg}
+              let options=res?.code==='0'?{type:"success",message:"编辑1成功"}:{type:"error",message:"编辑失败,错误信息:"+res?.msg}
               this.$message(options)
               this.dialogVisible = false
               this.load();
@@ -146,7 +146,7 @@ export default {
           //新增用户
           else {
             request.post("/admin",this.form).then(res => {
-              let options=res?.code==='0'?{type:"success",message:"编辑成功"}:{type:"error",message:"编辑失败,错误信息:"+res?.msg}
+              let options=res?.code==='0'?{type:"success",message:"新增2成功"}:{type:"error",message:"新增失败,错误信息:"+res?.msg}
               this.$message(options)
               this.dialogVisible = false
               this.load();
@@ -167,9 +167,13 @@ export default {
     },
     //编辑
     handleEdit(row){
-      this.form=JSON.parse(JSON.stringify(row)) //将行对象深拷贝到form
-      console.log(this.form)
-      this.dialogVisible=true; //显示表单
+      request.get(`/admin/info/${row.id}`).then(res=>{
+        if(res?.code==='0') {
+          this.form = res.data
+          this.dialogVisible=true
+        }
+        else this.$message({type:"error",message:"操作失败，"+res?.msg})
+      })
     },
     handleDelete(id){
       request.delete(`/admin/${id}`).then(res=>{

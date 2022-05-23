@@ -21,7 +21,32 @@ const routes = [
         path:'blog',
         name:'blog',
         component:()=>import("../views/Blog")
-      }
+      },
+      {
+        path:'video',
+        name:'video',
+        component:()=>import("../views/Video")
+      },
+      {
+        path:'category',
+        name:'category',
+        component:()=>import("../views/Category")
+      },
+      {
+        path:'location',
+        name:'location',
+        component:()=>import("../views/Location")
+      },
+      {
+        path:'post',
+        name:'post',
+        component:()=>import("../views/Post")
+      },
+      {
+        path:'comment',
+        name:'comment',
+        component:()=>import("../views/Comment")
+      },
     ]
   },
   {

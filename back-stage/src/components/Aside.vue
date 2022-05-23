@@ -12,9 +12,18 @@
           <el-menu-item index="admin">管理员管理</el-menu-item>
           <el-menu-item index="user">用户管理</el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="blog">文章管理</el-menu-item>
-        <el-menu-item index="video">视频管理</el-menu-item>
-        <el-menu-item index="cate" v-if="this?.level<2">类别管理</el-menu-item>
+        <el-sub-menu index="2">
+          <template #title>教程管理</template>
+          <el-menu-item index="blog">图文教程管理</el-menu-item>
+          <el-menu-item index="video">视频教程管理</el-menu-item>
+        </el-sub-menu>
+        <el-sub-menu index="3">
+          <template #title>类别管理</template>
+          <el-menu-item index="category">物品种类管理</el-menu-item>
+          <el-menu-item index="location">收纳位置管理</el-menu-item>
+        </el-sub-menu>
+        <el-menu-item index="post">讨论帖管理</el-menu-item>
+        <el-menu-item index="comment">评论管理</el-menu-item>
       </el-menu>
 </template>
 
