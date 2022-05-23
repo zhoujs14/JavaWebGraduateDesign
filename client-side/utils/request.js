@@ -20,7 +20,8 @@ request.interceptors.request.use(config => {
     let userJson = sessionStorage.getItem("user")
     if (!whiteUrls.includes(config.url)) {  // 校验请求白名单
         if(!userJson) {
-            router.push("/login")
+            //router.push("/login")
+            //console.log("未登录")
         } else {
             let user = JSON.parse(userJson);
             config.headers['token'] = user.token;  // 设置请求头
