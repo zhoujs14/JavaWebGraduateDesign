@@ -49,12 +49,19 @@ public class UserController extends BaseController {
     @PutMapping
     public Result<?> update(@RequestBody User user){
         Account a=getAccount();
+        //管理员修改用户信息
         if(a.getType().equals("admin")){
             if(getAdmin().getLevel()>2) return Result.error("402","当前用户权限不足");
             userMapper.updateById(user);
             return Result.success();
         }
+        //用户修改用户信息
         else if(a.getType().equals("user")&&getUser().getId()==user.getId()){
+            //若存在修改密码
+            if(user.getOldPwd()!=null&&user.getNewPwd()!=null){
+                if(!user.getOldPwd().equals(a.getPassword())) return Result.error("405","旧密码错误");
+                else user.setPassword(user.getNewPwd());
+            }
             userMapper.updateById(user);
             return Result.success();
         }

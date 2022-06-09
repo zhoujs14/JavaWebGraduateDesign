@@ -23,6 +23,12 @@ public class User extends Account {
     @TableField(exist = false)
     private String type="user";
 
+    @TableField(exist = false)
+    private String oldPwd;
+
+    @TableField(exist = false)
+    private String newPwd;
+
     public static Result<?> validate(User u){
         if(u.getUsername()==null||u.getUsername().length()<2||u.getUsername().length()>18) return Result.error("-1","非法用户名");
         if(u.getPassword()==null||u.getPassword().length()<6||u.getPassword().length()>20) return Result.error("-1","非法密码");

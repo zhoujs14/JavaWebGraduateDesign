@@ -71,13 +71,13 @@ export default {
       callback()
     },
     checkPwd(rule,value,callback){
-      if(value===''||value.length<passwordMinLen) callback(new Error(`密码长度不能小于${userNameMinLen}个字符`));
-      else if (value.length>passwordMaxLen) callback(new Error(`密码长度不得超过个${userNameMaxLen}个字符`));
+      if(value===''||value.length<passwordMinLen) callback(new Error(`密码长度不能小于${passwordMinLen}个字符`));
+      else if (value.length>passwordMaxLen) callback(new Error(`密码长度不得超过个${passwordMaxLen}个字符`));
       callback()
     },
     checkConfirm(rule,value,callback){
-      if(value===''||value.length<passwordMinLen) callback(new Error(`密码长度不能小于${userNameMinLen}个字符`));
-      else if (value.length>passwordMaxLen) callback(new Error(`密码长度不得超过个${userNameMaxLen}个字符`));
+      if(value===''||value.length<passwordMinLen) callback(new Error(`密码长度不能小于${passwordMinLen}个字符`));
+      else if (value.length>passwordMaxLen) callback(new Error(`密码长度不得超过个${passwordMaxLen}个字符`));
       else if(value!==this.form.password)callback(new Error(`两次输入密码不一致`));
       callback()
     },
