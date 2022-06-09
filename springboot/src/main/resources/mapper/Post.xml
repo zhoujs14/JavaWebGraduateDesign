@@ -19,6 +19,7 @@
         SELECT `post`.* ,user.nick_name,user.avatar_src from `post`
         left join user on user.id = post.author_id
         where post.parent_id is null and
-        if(#{type}='title',post.title like concat(concat('%',#{keyWords},'%')),user.nick_name like concat(concat('%',#{keyWords},'%')))
+        if(#{type}='title',post.title like concat(concat('%',#{keyWords},'%')),user.nick_name like concat(concat('%',#{keyWords},'%'))) and
+        if(#{tag}='all',0=0,post.tag like concat(concat('%',#{tag},'%')))
     </select>
 </mapper>

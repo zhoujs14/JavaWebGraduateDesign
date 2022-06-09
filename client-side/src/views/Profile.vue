@@ -108,6 +108,7 @@ export default {
     },
     save(){
       request.put("/user",this.user).then(res=> {
+        sessionStorage.setItem("user", JSON.stringify(this.user))
         let options=res?.code==='0'?{type:"success",message:"编辑成功"}:{type:"error",message:"编辑失败,错误信息:"+res.msg}
         this.$message(options)
         this.load();

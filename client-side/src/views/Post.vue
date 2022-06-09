@@ -9,16 +9,20 @@
       <el-card style="margin-right: 8px;display: flex;flex-direction: column;align-items: center">
         <div style="display: flex;justify-content: center;margin-bottom: 8px"><el-avatar :src="user.avatarSrc"/></div>
         <div>{{user.nickName}}</div>
+        <a href="http://localhost:9875/myPost" style="font-size: 13px;display: block;text-align:center;margin-top: 4px">我的讨论</a>
       </el-card>
     </el-col>
 
     <!-- 中央区域   -->
     <el-col :span="20">
       <el-card>
-        <template #header>
-          讨论区
-        </template>
         <!-- 帖子列表       -->
+        <el-tabs v-model="activeName" @tab-click="handleClick" style="margin-top: -12px">
+          <el-tab-pane label="全部" name="first"></el-tab-pane>
+          <el-tab-pane label="创意讨论" name="second"></el-tab-pane>
+          <el-tab-pane label="好物分享" name="third"></el-tab-pane>
+          <el-tab-pane label="物品交易" name="fourth"></el-tab-pane>
+        </el-tabs>
         <template v-if="this.records.length>0">
           <el-row  v-for="item in records" style="padding: 4px 8px">
             <el-col :span="16" style="cursor: pointer" @click="this.$router.push(`/postDetail?pid=${item.id}`)">
@@ -58,7 +62,7 @@ import request from "../../utils/request";
 import SearchBar from "../components/SearchBar";
 import PostForm from "../components/PostForm";
 
-
+const tabs=['all','创意讨论','好物分享','物品交易']
 
 export default {
   name: "Post",
@@ -73,7 +77,9 @@ export default {
       currentPage:1,
       pageSize:10,
       total: 0,
-      formDisabled:false
+      formDisabled:false,
+      activeName:'first',
+      tag:'all'
     }
   },
   methods:{
@@ -84,6 +90,7 @@ export default {
           pageSize:this.pageSize,
           searchPattern:this.searchPattern,
           keyWords:this.keyWords,
+          tag:this.tag
         }
       }).then(res=>{
         if(res?.code==='0'){
@@ -96,7 +103,7 @@ export default {
     },
     //处理搜索参数
     handleSearch(args){
-      console.log("search")
+      this.initialize() //初始化搜索参数
       this.searchPattern=args.searchPattern
       this.keyWords=args.keyWords
       this.load()
@@ -117,14 +124,16 @@ export default {
       this.records=[]
       this.total=0
     },
-    goToDetail(item){
-      if(this.type==='blog') this.$router.push('/blog?bid='+item.contentId)
-      else this.$router.push('/video?vid='+item.contentId)
-    },
+    //根据tag获取标签样式
     getTagType(tag){
       if(tag==='好物分享') return 'success'
       else if(tag==='物品交易') return 'warning'
-      else return 'default'
+      else return ''
+    },
+    handleClick(tab){
+      this.tag=tabs[tab.index]
+      this.initialize()
+      this.load()
     }
   },
   created() {

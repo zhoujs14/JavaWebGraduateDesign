@@ -55,6 +55,7 @@ public class PostController extends BaseController{
     //删除帖子
     @DeleteMapping("/{id}") //占位符 /{aa}/{bb} ==> (@PathVariable aa的类型 aa,@PathVariable bb的类型 bb)
     public Result<?> delete(@PathVariable Integer id){
+        if(getAccount()==null) return Result.error("401","请先登录");
         Post res = postMapper.selectById(id);
         if(res!=null){
             if(getAccount().getType().equals("user")&&res.getAuthorId()!=getAccount().getId()){
@@ -115,9 +116,10 @@ public class PostController extends BaseController{
     public Result<?> findPage(@RequestParam(defaultValue = "1") Integer pageNum, //页码
                               @RequestParam(defaultValue = "10") Integer pageSize, //项目条数
                               @RequestParam(defaultValue = "") String keyWords, //搜索关建字
-                              @RequestParam(defaultValue = "title") String searchPattern //根据..搜索
+                              @RequestParam(defaultValue = "title") String searchPattern, //根据..搜索
+                              @RequestParam(defaultValue = "all") String tag //标签名称
     ){
-        Page<Post> postPage= postMapper.findPage(new Page<>(pageNum,pageSize),searchPattern,keyWords);
+        Page<Post> postPage= postMapper.findPage(new Page<>(pageNum,pageSize),searchPattern,keyWords,tag);
         return Result.success(postPage);
     }
 }

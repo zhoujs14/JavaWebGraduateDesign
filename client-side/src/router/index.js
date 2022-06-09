@@ -52,6 +52,11 @@ const routes = [
         name:'postDetail',
         component:()=>import("../views/PostDetail")
       },
+      {
+        path: '/myPost',
+        name:'myPost',
+        component:()=>import("../views/MyPost")
+      },
     ]
   },
   {

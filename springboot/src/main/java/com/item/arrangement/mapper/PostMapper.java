@@ -12,5 +12,5 @@ public interface PostMapper extends BaseMapper<Post> {
      * @param keyWords 对应type的关建字,若为空则查询所有
      * @return postPage
      */
-    Page<Post> findPage(Page<Post> page, String type, String keyWords);
+    Page<Post> findPage(Page<Post> page, String type, String keyWords,String tag);
 }

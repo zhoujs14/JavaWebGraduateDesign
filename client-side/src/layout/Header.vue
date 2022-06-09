@@ -17,6 +17,7 @@
                 <el-dropdown-item class="item" disabled><div class="item">{{user?.nickName||""}}</div></el-dropdown-item>
                 <el-dropdown-item class="item" @click="goToProfile"><div class="item">个人中心</div></el-dropdown-item>
                 <el-dropdown-item class="item" @click="goToUpload" ><div class="item">投稿管理</div></el-dropdown-item>
+                <el-dropdown-item class="item" @click="goToMyPost" ><div class="item">我的讨论</div></el-dropdown-item>
                 <el-dropdown-item class="item" @click="exit" divided><div class="item">退出登录</div></el-dropdown-item>
               </el-dropdown-menu>
               <el-dropdown-menu v-if="!isLogin">
@@ -81,6 +82,11 @@ export default {
     goToUpload(){
       if(this.isLogin){
         this.$router.push('/uploadManager')
+      }
+    },
+    goToMyPost(){
+      if(this.isLogin){
+        this.$router.push('/myPost')
       }
     },
     goToFavlist(){
