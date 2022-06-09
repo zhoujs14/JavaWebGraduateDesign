@@ -12,6 +12,7 @@
         <result property="repostCount" column="repost_count"/>
         <result property="authorName" column="nick_name"/>
         <result property="authorAvatar" column="avatar_src"/>
+        <result property="tag" column="tag"/>
     </resultMap>
 
     <select id="findPage" resultMap="postMap">

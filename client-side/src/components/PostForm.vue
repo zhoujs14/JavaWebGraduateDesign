@@ -1,9 +1,20 @@
 <template>
   <!-- 发帖表单  -->
     <el-form v-model="form">
-      <el-form-item v-if="this.parentId==null">
-        <el-input v-model="form.title" placeholder="请输入标题"></el-input>
-      </el-form-item>
+      <el-row>
+        <el-col :span="5"><el-form-item v-if="this.parentId==null" label="标签" style="width: 200px">
+          <el-select v-model="form.tag">
+            <el-option value="创意讨论">创意讨论</el-option>
+            <el-option value="好物分享">好物分享</el-option>
+            <el-option value="物品交易">物品交易</el-option>
+          </el-select>
+        </el-form-item></el-col>
+        <el-col :span="19">
+          <el-form-item label="标题" v-if="this.parentId==null">
+            <el-input v-model="form.title" placeholder="请输入标题"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <div style="padding: 2px;margin-bottom:12px;border: lightgray 1px solid">
         <div id="toolbar-container"></div>
         <div id="editor-container" style="min-height: 20vh"></div>
@@ -30,7 +41,8 @@ export default {
     return {
       form:{
         title:'',
-        content:''
+        content:'',
+        tag:"创意讨论"
       }
     }
   },

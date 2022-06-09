@@ -22,7 +22,11 @@
         <template v-if="this.records.length>0">
           <el-row  v-for="item in records" style="padding: 4px 8px">
             <el-col :span="16" style="cursor: pointer" @click="this.$router.push(`/postDetail?pid=${item.id}`)">
-              <a :href="`/postDetail?pid=${item.id}`" style="font-size: 17px;margin-bottom: 14px">{{item.title}}</a>
+              <div class="row" style="align-items: center;margin-bottom: 8px">
+                <el-tag style="margin-right: 4px" :type="getTagType(item.tag)">{{item.tag}}</el-tag>
+                <a :href="`/postDetail?pid=${item.id}`" style="font-size: 17px">{{item.title}}</a>
+              </div>
+              <!--预览内容-->
               <div v-html="item.content" style="font-size: 8px;overflow: hidden;max-height: 90px"/>
             </el-col>
             <el-col :span="4" class="center" style="font-size: 14px;color: gray">{{item.authorName}}</el-col>
@@ -117,6 +121,11 @@ export default {
       if(this.type==='blog') this.$router.push('/blog?bid='+item.contentId)
       else this.$router.push('/video?vid='+item.contentId)
     },
+    getTagType(tag){
+      if(tag==='好物分享') return 'success'
+      else if(tag==='物品交易') return 'warning'
+      else return 'default'
+    }
   },
   created() {
     let user=JSON.parse(sessionStorage.getItem('user'))
