@@ -52,16 +52,34 @@ public class UserController extends BaseController {
         //管理员修改用户信息
         if(a.getType().equals("admin")){
             if(getAdmin().getLevel()>2) return Result.error("402","当前用户权限不足");
+
+            //校验数据合法性
+            Result res = User.validateAlert(user);
+            if(res.getCode().equals("-1")) return res;
+
+            //校验昵称是否存在
+            User u=userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getNickName,user.getNickName()));
+            if(u!=null&&u.getId()!=user.getId()) return Result.error("-2","该昵称已被注册");
+
             userMapper.updateById(user);
             return Result.success();
         }
         //用户修改用户信息
         else if(a.getType().equals("user")&&getUser().getId()==user.getId()){
+            //校验数据合法性
+            Result res = User.validateAlert(user);
+            if(res.getCode().equals("-1")) return res;
+
             //若存在修改密码
             if(user.getOldPwd()!=null&&user.getNewPwd()!=null){
                 if(!user.getOldPwd().equals(a.getPassword())) return Result.error("405","旧密码错误");
                 else user.setPassword(user.getNewPwd());
             }
+
+            //校验昵称是否存在
+            User u=userMapper.selectOne(Wrappers.<User>lambdaQuery().eq(User::getNickName,user.getNickName()));
+            if(u!=null&&u.getId()!=a.getId()) return Result.error("-2","该昵称已被注册");
+
             userMapper.updateById(user);
             return Result.success();
         }

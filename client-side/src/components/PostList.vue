@@ -158,7 +158,16 @@ export default {
       })
     },
     save(){
-
+      this.form.content=editor.getHtml()  //获取编辑器内容到表单
+      //修改文章
+      if(this.form.id){
+        request.put("/post",this.form).then(res=> {
+          let options=res?.code==='0'?{type:"success",message:"编辑成功"}:{type:"error",message:"编辑失败,错误信息:"+res?.msg}
+          this.$message(options)
+          this.load();
+          this.dialogVisible=false
+        })
+      }
     }
   },
   created() {

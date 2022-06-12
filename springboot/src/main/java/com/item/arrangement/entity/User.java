@@ -29,10 +29,20 @@ public class User extends Account {
     @TableField(exist = false)
     private String newPwd;
 
+    //校验注册数据
     public static Result<?> validate(User u){
         if(u.getUsername()==null||u.getUsername().length()<2||u.getUsername().length()>18) return Result.error("-1","非法用户名");
         if(u.getPassword()==null||u.getPassword().length()<6||u.getPassword().length()>20) return Result.error("-1","非法密码");
         if(u.getNickName()==null||u.getNickName().length()<2||u.getNickName().length()>12) return Result.error("-1","非法昵称");
+        if(u.getAge()!=null&&(u.getAge()>200||u.getAge()<0)) return Result.error("-1","非法年龄");
+        return Result.success();
+    }
+
+    //校验更新数据
+    public static Result<?> validateAlert(User u){
+        if(u.getUsername()!=null&&(u.getUsername().length()<2||u.getUsername().length()>18)) return Result.error("-1","非法用户名");
+        if(u.getPassword()!=null&&(u.getPassword().length()<6||u.getPassword().length()>20)) return Result.error("-1","非法密码");
+        if(u.getNickName()!=null&&(u.getNickName().length()<2||u.getNickName().length()>12)) return Result.error("-1","非法昵称");
         if(u.getAge()!=null&&(u.getAge()>200||u.getAge()<0)) return Result.error("-1","非法年龄");
         return Result.success();
     }

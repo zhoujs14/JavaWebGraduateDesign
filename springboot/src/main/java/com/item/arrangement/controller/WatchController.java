@@ -83,6 +83,7 @@ public class WatchController extends BaseController{
         LambdaQueryWrapper<Watch> wrapper= Wrappers.<Watch>lambdaQuery();
         wrapper.eq(Watch::getUid,uid).orderByDesc(Watch::getTime);
         List<Watch> watchHistory=watchMapper.selectList(wrapper);
+        System.out.println("size="+watchHistory.size());
         //拼接标题与封面地址
         for(Watch record:watchHistory){
             Integer cid=record.getContentId();
@@ -90,7 +91,7 @@ public class WatchController extends BaseController{
                 Blog b=blogMapper.selectById(cid);
                 if(b==null) {
                     watchHistory.remove(record);
-                    blogMapper.deleteById(record.getId());
+                    watchMapper.deleteById(record.getId());
                 }
                 else{
                     record.setTitle(b.getTitle());

@@ -2,7 +2,7 @@
   <header>
     <div class="headerContent">
       <div>
-        <span class="webTitle">家庭物品收纳整理学习网站</span>
+        <span class="webTitle">家庭物品整理收纳学习网站</span>
         <el-button type="text" @click="()=>this.$router.push('/')">收纳教程</el-button>
         <el-button type="text" @click="()=>this.$router.push('/post')">讨论区</el-button>
       </div>

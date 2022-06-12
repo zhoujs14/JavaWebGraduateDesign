@@ -38,6 +38,11 @@ export default {
       visible: false
     }
   },
+  watch: {
+    '$route' (to, from) {
+      this.$router.go(0);
+    }
+  },
   methods:{
     load(){
       request.get('/watch').then(res=>{
@@ -50,6 +55,7 @@ export default {
       })
     },
     goToDetail(item){
+      console.log("goto"+item.type+";"+item.contentId)
       if(item.type==='blog') this.$router.push('/blog?bid='+item.contentId)
       else this.$router.push('/video?vid='+item.contentId)
       this.visible=false

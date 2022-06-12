@@ -12,6 +12,7 @@
       <el-card>
         <h1>{{currentVideo.title}}</h1>
         <div class="time">{{currentVideo.time}}</div>
+        <!-- 视频播放器 -->
         <div id="mse"></div>
       </el-card>
       <!-- 点赞 收藏  -->

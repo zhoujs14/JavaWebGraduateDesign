@@ -152,7 +152,7 @@ export default {
           html: content||"",
           selector: '#editor-container',
           config: editorConfig,
-          mode: 'default' // 或 'simple' 参考下文
+          mode: 'default'
         })
 
         // 创建工具栏
