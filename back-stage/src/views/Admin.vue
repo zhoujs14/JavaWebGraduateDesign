@@ -2,7 +2,7 @@
   <div style="padding:10px" v-if="level>-1&&level<3">
     <!--    搜索区域-->
     <div style="margin: 10px 0">
-      <el-input v-model="keyWords" placeholder="请输入用户名" clearable style="width: 20%"/>
+      <el-input  @keyup.enter.native="load" v-model="keyWords" placeholder="请输入用户名" clearable style="width: 20%"/>
       <el-button style="margin-left: 10px" type="primary" :icon="searchIcon" @click="load">查询</el-button>
     </div>
     <!--    功能区域-->

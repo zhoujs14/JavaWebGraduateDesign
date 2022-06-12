@@ -1,14 +1,5 @@
 <template>
   <div style="padding:10px">
-    <!--    搜索区域-->
-    <div style="margin: 10px 0">
-      <el-input v-model="keyWords" placeholder="请输入关键字" clearable style="width: 20%"/>
-      <el-button style="margin-left: 10px" type="primary" :icon="searchIcon" @click="load">查询</el-button>
-    </div>
-    <!--    功能区域-->
-    <div style="margin: 10px 0">
-      <el-button type="primary" @click="add">新增</el-button>
-    </div>
     <!--    表格-->
     <el-table :data="tableData" border stripe style="width: 100%" fit>
       <el-table-column prop="id" label="ID" sortable />

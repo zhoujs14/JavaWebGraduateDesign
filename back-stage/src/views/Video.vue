@@ -1,10 +1,7 @@
 <template>
   <div style="padding:10px">
     <!--    搜索区域-->
-    <div style="margin: 10px 0">
-      <el-input v-model="keyWords" placeholder="请输入关键字" clearable style="width: 20%"/>
-      <el-button style="margin-left: 10px" type="primary" :icon="searchIcon" @click="load">查询</el-button>
-    </div>
+    <SearchBar style="width: 450px;margin-bottom: 12px" @handleSearch="handleSearch"/>
     <!--    表格-->
     <el-table :data="tableData" border stripe style="width: 100%" fit>
       <el-table-column prop="id" label="ID" sortable />
@@ -52,10 +49,11 @@
 import request from "../../utils/request";
 import { Search } from '@element-plus/icons-vue'
 import VideoUploader from "../components/VideoUploader";
+import SearchBar from "../components/SearchBar";
 
 export default {
   name: 'Video',
-  components: {VideoUploader},
+  components: {SearchBar, VideoUploader},
   data(){
     return {
       form:{},
@@ -77,18 +75,29 @@ export default {
     this.load();
   },
   methods:{
+    initialize(){
+      this.currentPage=1
+      this.total=0
+    },
     //获取分页数据
     load(){
       request.get("/video",{
         params:{
           pageNum:this.currentPage,
           pageSize:this.pageSize,
-          keyWords:this.keyWords
+          keyWords:this.keyWords,
+          searchPattern:this.searchPattern
         }
       }).then(res=>{
         this.tableData=res.data.records;
         this.total=res.data.total;
       })
+    },
+    handleSearch(args){
+      this.searchPattern=args.searchPattern
+      this.keyWords=args.keyWords
+      this.initialize()
+      this.load()
     },
     //新增文章弹窗
     add(){
