@@ -53,8 +53,11 @@ public class BlogController extends BaseController{
     public Result<?> delete(@PathVariable Integer id){
         Blog res=blogMapper.selectById(id);
         if(getAccount().getType().equals("user")&&res.getAuthorId()!=getAccount().getId()) return Result.error("401","无权限");
-        blogMapper.deleteById(id);
-        return Result.success();
+        else {
+            blogMapper.deleteById(id);
+            FileController.removeOldAvatar(res.getCover());
+            return Result.success();
+        }
     }
 
     //根据id获取博客内容
