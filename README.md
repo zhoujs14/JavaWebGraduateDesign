@@ -1,8 +1,8 @@
 # springboot-vue-demo
 
 ## 项目说明
-前后端分离的项目模板  
-前端：Vue ElementPlus  
+家庭物品整理收纳学习网站（前台、后台）
+前端：Vue ElementPlus  西瓜播放器 wangEditor
 后端: Springboot MybatisPlus Hutool
 
 ## Project setup
